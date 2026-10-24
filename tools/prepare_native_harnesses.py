@@ -204,6 +204,12 @@ def run_step(step, assets, package, source, node):
                 path.write_bytes(urllib.request.urlopen(f'https://raw.githubusercontent.com/{value}/{step["commit"]}/' + item['path'], timeout=30).read())
 
 
+def legacy(base):
+    """A folder holding anything besides package/ and source/ (a seal, a profile, another layout) is an
+    earlier installation; those two alone are left by an interrupted attempt, which starts again."""
+    return base.is_dir() and any(p.name not in ('package', 'source') for p in base.iterdir())
+
+
 def legacy_message(name):
     return (f'Папка .local/harnesses/{name} занята установкой прежнего формата (перенос стенда). '
             'Переименуйте её, чтобы стенд подготовил харнес из описания.')
@@ -218,17 +224,17 @@ def install(name, node=None):
     base = ROOT / '.local/harnesses' / name
     registry_path = ROOT / '.local/harnesses/portable.json'
     records = json.loads(registry_path.read_text(encoding='utf-8')) if registry_path.is_file() else {}
-    if name not in records and base.exists() and any(base.iterdir()):
+    if name not in records and legacy(base):
         raise ValueError(legacy_message(name))
     if (base / 'package-manifest.json').is_file():
         from exam_bench.portable_harnesses import verify
         verify(name, require_probe=False)
         return False
+    assets = {asset: download(asset, record) for asset, record in spec['downloads'].items()}
     for leftover in ('package', 'source'):
         shutil.rmtree(base / leftover, ignore_errors=True)  # an interrupted attempt starts again
     package = base / 'package'
     package.mkdir(parents=True)
-    assets = {asset: download(asset, record) for asset, record in spec['downloads'].items()}
     for step in spec['install']:
         run_step(step, assets, package, base / 'source', node)
     records[name] = spec['configuration']

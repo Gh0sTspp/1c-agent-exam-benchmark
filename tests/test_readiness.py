@@ -52,6 +52,18 @@ class Readiness(unittest.TestCase):
                         readiness.act('prepare-harness', data, root)
                 start.assert_not_called()
 
+    def test_interrupted_harness_preparation_is_offered_again(self):
+        from tools import prepare_native_harnesses as prepare
+        name, doc = next(iter(prepare.catalogue().items()))
+        with tempfile.TemporaryDirectory() as td, patch.object(prepare, 'target', return_value=next(iter(doc['targets']))):
+            base = Path(td) / '.local/harnesses' / name
+            (base / 'package').mkdir(parents=True)  # left by a download that timed out
+            item = next(h for h in readiness.harness_steps(Path(td), {}, True) if h['id'] == name)
+            self.assertEqual((item['state'], item['action']['id']), ('absent', 'prepare-harness'))
+            (base / 'package-manifest.json').write_text('{}')  # an installation of the earlier format
+            item = next(h for h in readiness.harness_steps(Path(td), {}, True) if h['id'] == name)
+            self.assertEqual((item['state'], item['action']), ('failed', None))
+
     def test_models_are_offered_per_agent_from_the_shipped_list(self):
         self.assertTrue(readiness.model_allowed('codex', readiness.agents()['codex']['default_model']))
         self.assertTrue(readiness.model_allowed('claude', 'claude-opus-5-5'))

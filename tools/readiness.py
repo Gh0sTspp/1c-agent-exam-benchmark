@@ -178,7 +178,7 @@ def calibration_state(root, pick):
 def harness_steps(root, action, calibrated):
     """Every shipped harness with its state on this machine and the next thing to do."""
     from tools.demo_runner import harness_options
-    from tools.prepare_native_harnesses import catalogue, target
+    from tools.prepare_native_harnesses import catalogue, legacy, target
     options = {h['id']: h for h in harness_options(root) if h['id'] != 'none'}
     working = action.get('phase') == 'working' and action.get('action') == 'harness'
     items = []
@@ -191,7 +191,7 @@ def harness_steps(root, action, calibrated):
             item.update(state='unavailable', note=f'Пакета для этой ОС ({target()}) пока нет.')
         elif options.get(name, {}).get('ready'):
             item.update(state='ready', note='Готов к экзамену.')
-        elif name not in options and (root / '.local/harnesses' / name).is_dir() and any((root / '.local/harnesses' / name).iterdir()) \
+        elif name not in options and legacy(root / '.local/harnesses' / name) \
                 and not (action.get('action') == 'harness' and action.get('id') == name):
             from tools.prepare_native_harnesses import legacy_message
             item.update(state='failed', note=legacy_message(name))
