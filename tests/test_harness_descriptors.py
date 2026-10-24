@@ -1,7 +1,10 @@
 import contextlib
+import hashlib
+import io
 import json
 import tempfile
 import unittest
+import urllib.error
 from pathlib import Path
 from unittest.mock import patch
 
@@ -86,6 +89,80 @@ class Descriptors(unittest.TestCase):
             with self.assertRaisesRegex(ValueError, 'прежнего формата'):
                 prepare.install('test-1')
             self.assertTrue((base / 'notes.txt').is_file())
+
+
+class Response(io.BytesIO):
+    """What urlopen returns: a status and a body that ends cleanly or, given an error, breaks off."""
+    def __init__(self, body, status=200, error=None):
+        super().__init__(body); self.status, self.error = status, error
+
+    def read(self, size=-1):
+        chunk = super().read(size)
+        if not chunk and self.error:
+            raise self.error
+        return chunk
+
+
+class Downloads(unittest.TestCase):
+    BODY = bytes(range(256)) * 40
+    RELEASE = 'https://github.com/me/tool/releases/download/v1/tool.zip'
+    ARCHIVE = 'https://codeload.github.com/me/tool/zip/refs/tags/v1'
+
+    def record(self, url):
+        return {'url': url, 'sha256': hashlib.sha256(self.BODY).hexdigest(), 'bytes': len(self.BODY)}
+
+    @contextlib.contextmanager
+    def stand(self, *answers):
+        """urlopen gives these answers in turn; pauses between attempts are recorded, not waited."""
+        with tempfile.TemporaryDirectory() as td, patch.object(prepare, 'ROOT', Path(td)), \
+             patch.object(prepare.urllib.request, 'urlopen', side_effect=answers) as urlopen, \
+             patch.object(prepare.time, 'sleep') as sleep:
+            yield Path(td) / '.local/downloads/harnesses', urlopen, sleep
+
+    @staticmethod
+    def ranges(urlopen):
+        return [c.args[0].get_header('Range') for c in urlopen.call_args_list]
+
+    def test_a_release_asset_resumes_after_a_broken_transfer(self):
+        with self.stand(Response(self.BODY[:4096], error=TimeoutError('timed out')),
+                        Response(self.BODY[4096:], status=206)) as (folder, urlopen, sleep):
+            self.assertEqual(prepare.download('tool.zip', self.record(self.RELEASE)).read_bytes(), self.BODY)
+            self.assertEqual(self.ranges(urlopen), [None, 'bytes=4096-'])
+            sleep.assert_called_once_with(5)
+            self.assertEqual([p.name for p in folder.iterdir()], ['tool.zip'])
+
+    def test_an_archive_without_range_support_is_downloaded_again(self):
+        # codeload.github.com may end the stream early without an error and answers Range with 200
+        with self.stand(Response(self.BODY[:4096]), Response(self.BODY)) as (_, urlopen, sleep):
+            self.assertEqual(prepare.download('tool.zip', self.record(self.ARCHIVE)).read_bytes(), self.BODY)
+            self.assertEqual(self.ranges(urlopen), [None, 'bytes=4096-'])
+            sleep.assert_called_once_with(5)
+
+    def test_the_last_failure_names_the_manual_route_which_skips_the_download(self):
+        with self.stand(*[urllib.error.URLError('timed out')] * 4) as (folder, urlopen, sleep):
+            with self.assertRaisesRegex(ValueError, r'\.local/downloads/harnesses/tool\.zip'):
+                prepare.download('tool.zip', self.record(self.ARCHIVE))
+            self.assertEqual([c.args[0] for c in sleep.call_args_list], [5, 15, 45])
+            (folder / 'tool.zip').write_bytes(self.BODY)  # put there by hand
+            self.assertEqual(prepare.download('tool.zip', self.record(self.ARCHIVE)), folder / 'tool.zip')
+            self.assertEqual(urlopen.call_count, 4)
+
+    def test_a_missing_file_is_not_requested_again(self):
+        with self.stand(urllib.error.HTTPError(self.RELEASE, 404, 'Not Found', {}, None)) as (_, urlopen, sleep):
+            with self.assertRaisesRegex(ValueError, '404'):
+                prepare.download('tool.zip', self.record(self.RELEASE))
+            sleep.assert_not_called()
+
+    def test_size_is_checked_before_the_hash_and_a_wrong_download_is_discarded(self):
+        record = self.record(self.RELEASE)
+        with self.stand(Response(self.BODY[::-1])) as (folder, _, _):
+            with self.assertRaisesRegex(ValueError, 'checksum'):
+                prepare.download('tool.zip', record)
+            self.assertEqual(list(folder.iterdir()), [])  # the next attempt starts afresh
+            (folder / 'tool.zip').write_bytes(self.BODY[:100])
+            with patch.object(prepare.hashlib, 'sha256', side_effect=AssertionError('hashed')), \
+                 self.assertRaisesRegex(ValueError, '100 байт вместо 10240'):
+                prepare.download('tool.zip', record)
 
 
 class PosixInstallSteps(unittest.TestCase):

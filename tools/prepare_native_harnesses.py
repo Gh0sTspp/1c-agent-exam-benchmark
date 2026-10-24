@@ -8,6 +8,7 @@ No global Codex plugins are changed. Checks never call a model.
 import argparse
 import base64
 import hashlib
+import http.client
 import json
 import os
 import platform
@@ -15,6 +16,8 @@ import shutil
 import subprocess
 import sys
 import tarfile
+import time
+import urllib.error
 import urllib.request
 import zipfile
 from pathlib import Path
@@ -24,21 +27,60 @@ sys.path.insert(0, str(ROOT))
 from exam_bench.common import write_json
 
 
-def download(name, record):
-    path = ROOT / '.local/downloads/harnesses' / name
-    path.parent.mkdir(parents=True, exist_ok=True)
-    if not path.exists():
-        url = record['url']
-        if '/releases/download/' in url:
-            url += '?download=1'
-        request = urllib.request.Request(url, headers={'User-Agent': '1c-agent-exam-benchmark'})
-        partial = path.with_suffix(path.suffix + '.partial')
-        with urllib.request.urlopen(request, timeout=120) as response, partial.open('wb') as output:
-            while chunk := response.read(1024 * 1024):
-                output.write(chunk)
-        partial.replace(path)
+PAUSES = (5, 15, 45)  # seconds before each repeated download attempt
+
+
+def fetch(url, partial, size):
+    """One attempt. With part of the file already received it asks for the rest; a server that answers
+    206 (release assets) continues the file, one that answers 200 (codeload.github.com) sends it anew."""
+    if '/releases/download/' in url:
+        url += '?download=1'
+    headers = {'User-Agent': '1c-agent-exam-benchmark'}
+    have = partial.stat().st_size if partial.exists() else 0
+    if size and 0 < have < size:
+        headers['Range'] = f'bytes={have}-'
+    with urllib.request.urlopen(urllib.request.Request(url, headers=headers), timeout=120) as response, \
+         partial.open('ab' if 'Range' in headers and response.status == 206 else 'wb') as output:
+        while chunk := response.read(1024 * 1024):
+            output.write(chunk)
+    if size and (got := partial.stat().st_size) < size:
+        raise ConnectionError(f'передача оборвалась на {got} байт из {size}')
+
+
+def check_download(path, name, record):
+    """The size from the descriptor first: a cut transfer shows before the file is hashed."""
+    if 'bytes' in record and (got := path.stat().st_size) != record['bytes']:
+        raise ValueError(f'{name}: {got} байт вместо {record["bytes"]} из описания харнеса')
     if hashlib.sha256(path.read_bytes()).hexdigest() != record['sha256']:
         raise ValueError('Release checksum differs from pinned download: ' + name)
+
+
+def download(name, record):
+    """A file already in .local/downloads/harnesses (one put there by hand, say) is only checked.
+    A broken transfer is repeated after a pause; whatever fails the check is discarded."""
+    path = ROOT / '.local/downloads/harnesses' / name
+    path.parent.mkdir(parents=True, exist_ok=True)
+    if path.exists():
+        check_download(path, name, record)
+        return path
+    partial = path.with_suffix(path.suffix + '.partial')
+    for pause in (*PAUSES, None):
+        try:
+            fetch(record['url'], partial, record.get('bytes'))
+            break
+        except (OSError, http.client.HTTPException) as error:  # URLError, TimeoutError, a cut stream
+            permanent = isinstance(error, urllib.error.HTTPError) and 400 <= error.code < 500 and error.code not in (408, 429)
+            if pause is None or permanent:
+                raise ValueError(f'Не удалось скачать {name}: {error}. Скачайте {record["url"]} другим способом и положите '
+                                 f'в .local/downloads/harnesses/{name}: такой файл стенд не скачивает, а только сверяет '
+                                 'размер и SHA-256.') from error
+            time.sleep(pause)
+    try:
+        check_download(partial, name, record)
+    except ValueError:
+        partial.unlink()
+        raise
+    partial.replace(path)
     return path
 
 

@@ -7,7 +7,7 @@
 
 Подготовка одного харнеса:
 
-1. скачать файлы из `downloads` и сверить SHA-256;
+1. скачать файлы из `downloads` в `.local/downloads/harnesses/` и сверить размер и SHA-256;
 2. выполнить шаги `install` в `.local/harnesses/<id>/package`;
 3. записать слепок пакета и профиль установки в `.local/harnesses/<id>/` — у каждой машины свои,
    в Git ничего не меняется;
@@ -24,6 +24,13 @@
 python tools/prepare_native_harnesses.py --list
 python tools/prepare_native_harnesses.py --install --check bsl-analyzer-0.3.2
 ```
+
+Если скачивание не удалось или оборвалось, стенд повторяет его ещё три раза: через 5, 15
+и 45 секунд. Файл релиза (`github.com/.../releases/download/...`) докачивается с места
+обрыва, архив с `codeload.github.com` скачивается заново. Если и это не помогло, скачайте
+файл другим способом и положите его в `.local/downloads/harnesses/<имя из downloads>`,
+например `.local/downloads/harnesses/unica-package.zip`. Файл, который уже лежит там,
+стенд не скачивает, а только сверяет его размер и SHA-256.
 
 ## Формат
 
@@ -61,6 +68,8 @@ python tools/prepare_native_harnesses.py --install --check bsl-analyzer-0.3.2
 - Ключ цели — `<ОС>-<архитектура>`: `windows-x64`, `linux-x64`, `macos-arm64`, `macos-x64`.
   Харнес без цели для текущей ОС показывается недоступным.
 - Все URL — `https://`, у каждого файла закреплён SHA-256.
+- `bytes` — размер файла. По нему стенд видит оборванную передачу до подсчёта SHA-256;
+  без него файл не докачивается, а скачивается заново.
 
 ### Шаги установки
 
