@@ -1,0 +1,490 @@
+{
+  "run_id": "demo-20261024T203042Z-421bbf",
+  "created_at": "2026-10-26T20:26:12.118471+00:00",
+  "model": "gpt-6-astra",
+  "harness": "unica-0.14.0-rc.1",
+  "solve_seconds": 4242,
+  "platform": "8.3.27.1688",
+  "counts": {
+    "pass": 64,
+    "fail": 1
+  },
+  "rules": [
+    {
+      "id": "BU01",
+      "verdict": "pass",
+      "coverage": "selected_fixture",
+      "reason": null
+    },
+    {
+      "id": "BU04",
+      "verdict": "pass",
+      "coverage": "selected_fixture",
+      "reason": null
+    },
+    {
+      "id": "BU05",
+      "verdict": "pass",
+      "coverage": "selected_fixture",
+      "reason": null
+    },
+    {
+      "id": "BU16",
+      "verdict": "pass",
+      "coverage": "selected_fixture",
+      "reason": null
+    },
+    {
+      "id": "BU17",
+      "verdict": "pass",
+      "coverage": "selected_fixture",
+      "reason": null
+    },
+    {
+      "id": "BU02",
+      "verdict": "pass",
+      "coverage": "partial",
+      "reason": null
+    },
+    {
+      "id": "BU10",
+      "verdict": "pass",
+      "coverage": "selected_fixture",
+      "reason": null
+    },
+    {
+      "id": "BU12",
+      "verdict": "pass",
+      "coverage": "selected_fixture",
+      "reason": null
+    },
+    {
+      "id": "BU03",
+      "verdict": "pass",
+      "coverage": "selected_fixture",
+      "reason": null
+    },
+    {
+      "id": "BU06",
+      "verdict": "pass",
+      "coverage": "selected_fixture",
+      "reason": null
+    },
+    {
+      "id": "BU07",
+      "verdict": "pass",
+      "coverage": "selected_fixture",
+      "reason": null
+    },
+    {
+      "id": "BU08",
+      "verdict": "pass",
+      "coverage": "selected_fixture",
+      "reason": null
+    },
+    {
+      "id": "BU09",
+      "verdict": "pass",
+      "coverage": "selected_fixture",
+      "reason": null
+    },
+    {
+      "id": "BU11",
+      "verdict": "pass",
+      "coverage": "selected_fixture",
+      "reason": null
+    },
+    {
+      "id": "BU14",
+      "verdict": "pass",
+      "coverage": "selected_fixture",
+      "reason": null
+    },
+    {
+      "id": "BU15",
+      "verdict": "pass",
+      "coverage": "selected_fixture",
+      "reason": null
+    },
+    {
+      "id": "BU13",
+      "verdict": "pass",
+      "coverage": "selected_fixture",
+      "reason": null
+    },
+    {
+      "id": "OU15",
+      "verdict": "pass",
+      "coverage": "selected_fixture",
+      "reason": null
+    },
+    {
+      "id": "OU16",
+      "verdict": "pass",
+      "coverage": "selected_fixture",
+      "reason": null
+    },
+    {
+      "id": "OU17",
+      "verdict": "pass",
+      "coverage": "selected_fixture",
+      "reason": null
+    },
+    {
+      "id": "OU02",
+      "verdict": "pass",
+      "coverage": "selected_fixture",
+      "reason": null
+    },
+    {
+      "id": "OU18",
+      "verdict": "pass",
+      "coverage": "selected_fixture",
+      "reason": null
+    },
+    {
+      "id": "OU14",
+      "verdict": "pass",
+      "coverage": "selected_fixture",
+      "reason": null
+    },
+    {
+      "id": "OU01",
+      "verdict": "pass",
+      "coverage": "selected_fixture",
+      "reason": null
+    },
+    {
+      "id": "OU03",
+      "verdict": "pass",
+      "coverage": "selected_fixture",
+      "reason": null
+    },
+    {
+      "id": "OU05",
+      "verdict": "pass",
+      "coverage": "selected_fixture",
+      "reason": null
+    },
+    {
+      "id": "OU06",
+      "verdict": "pass",
+      "coverage": "no_violation_found",
+      "reason": null
+    },
+    {
+      "id": "OU07",
+      "verdict": "pass",
+      "coverage": "selected_fixture",
+      "reason": null
+    },
+    {
+      "id": "OU08",
+      "verdict": "pass",
+      "coverage": "selected_fixture",
+      "reason": null
+    },
+    {
+      "id": "OU09",
+      "verdict": "pass",
+      "coverage": "selected_fixture",
+      "reason": null
+    },
+    {
+      "id": "OU10",
+      "verdict": "pass",
+      "coverage": "selected_fixture",
+      "reason": null
+    },
+    {
+      "id": "OU11",
+      "verdict": "pass",
+      "coverage": "selected_fixture",
+      "reason": null
+    },
+    {
+      "id": "OU12",
+      "verdict": "pass",
+      "coverage": "selected_fixture",
+      "reason": null
+    },
+    {
+      "id": "OU13",
+      "verdict": "pass",
+      "coverage": "selected_fixture",
+      "reason": null
+    },
+    {
+      "id": "OU04",
+      "verdict": "pass",
+      "coverage": "selected_fixture",
+      "reason": null
+    },
+    {
+      "id": "OU19",
+      "verdict": "pass",
+      "coverage": "selected_fixture",
+      "reason": null
+    },
+    {
+      "id": "OU20",
+      "verdict": "pass",
+      "coverage": "selected_fixture",
+      "reason": null
+    },
+    {
+      "id": "OU21",
+      "verdict": "pass",
+      "coverage": "selected_fixture",
+      "reason": null
+    },
+    {
+      "id": "PR01",
+      "verdict": "pass",
+      "coverage": "selected_fixture",
+      "reason": null
+    },
+    {
+      "id": "PR02",
+      "verdict": "pass",
+      "coverage": "selected_fixture",
+      "reason": null
+    },
+    {
+      "id": "PR03",
+      "verdict": "pass",
+      "coverage": "selected_fixture",
+      "reason": null
+    },
+    {
+      "id": "PR04",
+      "verdict": "pass",
+      "coverage": "selected_fixture",
+      "reason": null
+    },
+    {
+      "id": "PR05",
+      "verdict": "pass",
+      "coverage": "selected_fixture",
+      "reason": null
+    },
+    {
+      "id": "PR06",
+      "verdict": "pass",
+      "coverage": "selected_fixture",
+      "reason": null
+    },
+    {
+      "id": "PR07",
+      "verdict": "pass",
+      "coverage": "selected_fixture",
+      "reason": null
+    },
+    {
+      "id": "PR08",
+      "verdict": "pass",
+      "coverage": "selected_fixture",
+      "reason": null
+    },
+    {
+      "id": "PR09",
+      "verdict": "pass",
+      "coverage": "selected_fixture",
+      "reason": null
+    },
+    {
+      "id": "PR10",
+      "verdict": "pass",
+      "coverage": "selected_fixture",
+      "reason": null
+    },
+    {
+      "id": "PR11",
+      "verdict": "pass",
+      "coverage": "selected_fixture",
+      "reason": null
+    },
+    {
+      "id": "PR12",
+      "verdict": "pass",
+      "coverage": "selected_fixture",
+      "reason": null
+    },
+    {
+      "id": "PR13",
+      "verdict": "pass",
+      "coverage": "selected_fixture",
+      "reason": null
+    },
+    {
+      "id": "PR14",
+      "verdict": "pass",
+      "coverage": "no_violation_found",
+      "reason": null
+    },
+    {
+      "id": "PR15",
+      "verdict": "pass",
+      "coverage": "selected_fixture",
+      "reason": null
+    },
+    {
+      "id": "PR16",
+      "verdict": "pass",
+      "coverage": "selected_fixture",
+      "reason": null
+    },
+    {
+      "id": "PR17",
+      "verdict": "pass",
+      "coverage": "selected_fixture",
+      "reason": null
+    },
+    {
+      "id": "PR18",
+      "verdict": "pass",
+      "coverage": "selected_fixture",
+      "reason": null
+    },
+    {
+      "id": "PR19",
+      "verdict": "pass",
+      "coverage": "selected_fixture",
+      "reason": null
+    },
+    {
+      "id": "F01",
+      "verdict": "pass",
+      "coverage": "selected_fixture",
+      "reason": null
+    },
+    {
+      "id": "F02",
+      "verdict": "pass",
+      "coverage": "selected_fixture",
+      "reason": null
+    },
+    {
+      "id": "F03",
+      "verdict": "pass",
+      "coverage": "selected_fixture",
+      "reason": null
+    },
+    {
+      "id": "F04",
+      "verdict": "pass",
+      "coverage": "selected_fixture",
+      "reason": null
+    },
+    {
+      "id": "F05",
+      "verdict": "fail",
+      "coverage": "selected_fixture",
+      "reason": null
+    },
+    {
+      "id": "G01",
+      "verdict": "pass",
+      "coverage": "static_sources",
+      "reason": null
+    },
+    {
+      "id": "G02",
+      "verdict": "pass",
+      "coverage": "static_sources",
+      "reason": null
+    },
+    {
+      "id": "G03",
+      "verdict": "pass",
+      "coverage": "static_sources",
+      "reason": null
+    }
+  ],
+  "charges": [
+    {
+      "id": "F1C-GEN01",
+      "points": "0.5",
+      "reason": "не выполнено требование: F05 — typed ['C1', 'C2'], written True, stored [('BENCH_Валюта', ''), ('BENCH_Срок', '')]"
+    },
+    {
+      "id": "F1C-GEN12",
+      "points": "0.25",
+      "reason": "текст запроса не разбирается платформой: CommonModules/РасчетЗарплаты/Ext/Module.bsl:91 — Поле не найдено \"Сотрудник\""
+    },
+    {
+      "id": "F1C-GEN15",
+      "points": "0.5",
+      "reason": "Reports/ВедомостьПоПодразделению/Ext/ManagerModule.bsl:3 — РегистрНакопления.ОстаткиНоменклатуры.ОстаткиИОбороты: отбор по Подразделение, Свойство, индексы таблицы начинаются с Номенклатура"
+    },
+    {
+      "id": "F1C-GEN15",
+      "points": "0.5",
+      "reason": "Reports/ВедомостьПоПодразделению/Ext/ManagerModule.bsl:15 — РегистрНакопления.ОстаткиНоменклатуры.ОстаткиИОбороты: отбор по Подразделение, Свойство, индексы таблицы начинаются с Номенклатура"
+    },
+    {
+      "id": "F1C-GEN14",
+      "points": "1.5",
+      "reason": "Reports/ПродажиБухгалтерские/Ext/ManagerModule.bsl:2 — РегистрБухгалтерии.Управленческий: итоги считаются по основной таблице регистра, а не по виртуальной"
+    },
+    {
+      "id": "F1C-GEN28",
+      "points": "1.0",
+      "reason": "проводимые документы в режиме «Записывать модифицированные»: Операция, Сборка"
+    },
+    {
+      "id": "F1C-GEN28",
+      "points": "1.0",
+      "reason": "оперативное проведение разрешено у документов с движениями по регистрам расчёта: НачислениеЗарплаты"
+    }
+  ],
+  "score_upper_bound": "-0.25",
+  "score": null,
+  "grade": "unsatisfactory",
+  "deductions": "5.25",
+  "not_assessed": 15,
+  "gates": {
+    "starter_origin": "passed",
+    "load": "loaded",
+    "clients": "compiles",
+    "demo_data": "present"
+  },
+  "infrastructure_errors": false,
+  "comparison_eligible": false,
+  "binding_compatibility": {
+    "scope": "supplemental_named_subconto_adapter",
+    "original_binding_sha256": "0bcfa74167b76b733f0d2981e84334b84e16371f42ee5bcebc296739b83d8bd8",
+    "normalized_binding_sha256": "ef7ab816d67a8f4d213f9e4f09ef42a4c96053d0ed56c8ebcbda30afbeae6a55",
+    "normalizer_sha256": "7327277143d80a531e4c254ac74a9fc0e0d5c76572d53b8469e0a580eda17d65",
+    "canonical_ledger_sha256": "caffc29276c5d562e33ddb73f7d3575b6bf8605e699fe198617dc75fcb8253a1",
+    "changes": [
+      {
+        "field": "fields.ledger.item_debit",
+        "before": "Номенклатура",
+        "after": "ВидыСубконто.Номенклатура",
+        "kind": "named"
+      },
+      {
+        "field": "fields.ledger.item_credit",
+        "before": "Номенклатура",
+        "after": "ВидыСубконто.Номенклатура",
+        "kind": "named"
+      },
+      {
+        "field": "fields.ledger.warehouse_debit",
+        "before": "Склады",
+        "after": "ВидыСубконто.Склады",
+        "kind": "named"
+      },
+      {
+        "field": "fields.ledger.warehouse_credit",
+        "before": "Склады",
+        "after": "ВидыСубконто.Склады",
+        "kind": "named"
+      }
+    ],
+    "basis": "kind names expanded only to exactly one predefined kind of the account chart on the role side; all role types checked."
+  },
+  "evaluation_sha256": "ebf07063fce00517b1a5596f9c5db60e8c0f6f15824508da1bc890c990c0f502",
+  "downloads": []
+}
