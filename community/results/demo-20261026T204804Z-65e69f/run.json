@@ -1,0 +1,45 @@
+{
+  "client": "claude",
+  "model": "claude-opus-5-5",
+  "client_version": "2.1.310",
+  "reasoning_effort": "medium",
+  "harness": "ai-rules-1c-3f909dc",
+  "billing_channel": "subscription",
+  "solve_timeout_seconds": 10800,
+  "time_series": null,
+  "delegation": "native_disabled",
+  "network_profile": "open-book_shell",
+  "deadline_disclosed": true,
+  "statement_sha256": "8a6ccb3e673826d1f8220fda53eb310e3ec18c136d87ce8f4cebb2a08614e7e5",
+  "starter_dt_sha256": "f40d084818b0d1cfe503fc7653a6a13f1a8e47fcd1688dad6245b12744eb4638",
+  "profile_sha256": "8c5dd51ff06982703b86f733da56d172dd452f3db00b2c9a00296e8176fee580",
+  "execution_policy_sha256": "fd2cd554bb1eff56e5a09f817ecf5eaa2f4d29851499d98c9a0a1675fd07aa4b",
+  "calibration_sha256": "fb1dcb74e6b2bd4731d30b0ffc4bd84053cebd2ed4006d67be20b878b4bc7fd4",
+  "started_at": "2026-10-26T07:09:28.758105+00:00",
+  "timing": {
+    "prepare_ms": 32963,
+    "solve_ms": 2725971,
+    "grade_ms": null
+  },
+  "original_submission_valid": true,
+  "model_provenance": "client_reported",
+  "tokens": {
+    "input": 42023364,
+    "cached_input": 41639627,
+    "fresh_input": 383737,
+    "output": 192780,
+    "reasoning_output": null,
+    "total": 42216144,
+    "coverage": "final_result_model_usage"
+  },
+  "tools": {
+    "mcp_calls": 46,
+    "unica_calls": 0,
+    "failed_calls": 5
+  },
+  "process": {
+    "status": "completed",
+    "exit_code": 0,
+    "stop_confirmed": true
+  }
+}

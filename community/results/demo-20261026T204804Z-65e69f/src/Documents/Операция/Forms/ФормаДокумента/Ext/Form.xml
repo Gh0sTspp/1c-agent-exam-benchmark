@@ -1,0 +1,125 @@
+﻿<?xml version="1.0" encoding="UTF-8"?>
+<Form xmlns="http://v8.1c.ru/8.3/xcf/logform" xmlns:app="http://v8.1c.ru/8.2/managed-application/core" xmlns:cfg="http://v8.1c.ru/8.1/data/enterprise/current-config" xmlns:dcscor="http://v8.1c.ru/8.1/data-composition-system/core" xmlns:dcsset="http://v8.1c.ru/8.1/data-composition-system/settings" xmlns:ent="http://v8.1c.ru/8.1/data/enterprise" xmlns:lf="http://v8.1c.ru/8.2/managed-application/logform" xmlns:style="http://v8.1c.ru/8.1/data/ui/style" xmlns:sys="http://v8.1c.ru/8.1/data/ui/fonts/system" xmlns:v8="http://v8.1c.ru/8.1/data/core" xmlns:v8ui="http://v8.1c.ru/8.1/data/ui" xmlns:web="http://v8.1c.ru/8.1/data/ui/colors/web" xmlns:win="http://v8.1c.ru/8.1/data/ui/colors/windows" xmlns:xr="http://v8.1c.ru/8.3/xcf/readable" xmlns:xs="http://www.w3.org/2001/XMLSchema" xmlns:xsi="http://www.w3.org/2001/XMLSchema-instance" version="2.20">
+	<AutoCommandBar name="ФормаКоманднаяПанель" id="-1">
+		<Autofill>true</Autofill>
+	</AutoCommandBar>
+	<Events>
+		<Event name="OnReadAtServer">ПриЧтенииНаСервере</Event>
+		<Event name="BeforeWriteAtServer">ПередЗаписьюНаСервере</Event>
+	</Events>
+	<ChildItems>
+		<InputField name="Номер" id="1">
+			<DataPath>Объект.Number</DataPath>
+			<ContextMenu name="НомерКонтекстноеМеню" id="2"/>
+			<ExtendedTooltip name="НомерРасширеннаяПодсказка" id="3"/>
+		</InputField>
+		<InputField name="Дата" id="4">
+			<DataPath>Объект.Date</DataPath>
+			<ContextMenu name="ДатаКонтекстноеМеню" id="5"/>
+			<ExtendedTooltip name="ДатаРасширеннаяПодсказка" id="6"/>
+		</InputField>
+		<InputField name="Содержание" id="7">
+			<DataPath>Объект.Содержание</DataPath>
+			<ContextMenu name="СодержаниеКонтекстноеМеню" id="8"/>
+			<ExtendedTooltip name="СодержаниеРасширеннаяПодсказка" id="9"/>
+		</InputField>
+		<Table name="Проводки" id="10">
+			<DataPath>Проводки</DataPath>
+			<ContextMenu name="ПроводкиКонтекстноеМеню" id="11"/>
+			<AutoCommandBar name="ПроводкиКоманднаяПанель" id="12"/>
+			<ExtendedTooltip name="ПроводкиРасширеннаяПодсказка" id="13"/>
+			<SearchStringAddition name="ПроводкиСтрокаПоиска" id="14">
+				<AdditionSource>
+					<Item>Проводки</Item>
+					<Type>SearchStringRepresentation</Type>
+				</AdditionSource>
+				<ContextMenu name="ПроводкиСтрокаПоискаКонтекстноеМеню" id="15"/>
+				<ExtendedTooltip name="ПроводкиСтрокаПоискаРасширеннаяПодсказка" id="16"/>
+			</SearchStringAddition>
+			<ViewStatusAddition name="ПроводкиСостояниеПросмотра" id="17">
+				<AdditionSource>
+					<Item>Проводки</Item>
+					<Type>ViewStatusRepresentation</Type>
+				</AdditionSource>
+				<ContextMenu name="ПроводкиСостояниеПросмотраКонтекстноеМеню" id="18"/>
+				<ExtendedTooltip name="ПроводкиСостояниеПросмотраРасширеннаяПодсказка" id="19"/>
+			</ViewStatusAddition>
+			<SearchControlAddition name="ПроводкиУправлениеПоиском" id="20">
+				<AdditionSource>
+					<Item>Проводки</Item>
+					<Type>SearchControl</Type>
+				</AdditionSource>
+				<ContextMenu name="ПроводкиУправлениеПоискомКонтекстноеМеню" id="21"/>
+				<ExtendedTooltip name="ПроводкиУправлениеПоискомРасширеннаяПодсказка" id="22"/>
+			</SearchControlAddition>
+			<ChildItems>
+				<InputField name="ПроводкиСчетДт" id="30">
+					<DataPath>Проводки.СчетДт</DataPath>
+					<ContextMenu name="ПроводкиСчетДтКонтекстноеМеню" id="31"/>
+					<ExtendedTooltip name="ПроводкиСчетДтРасширеннаяПодсказка" id="32"/>
+				</InputField>
+				<InputField name="ПроводкиСубконтоДт1" id="33">
+					<DataPath>Проводки.СубконтоДт1</DataPath>
+					<ContextMenu name="ПроводкиСубконтоДт1КонтекстноеМеню" id="34"/>
+					<ExtendedTooltip name="ПроводкиСубконтоДт1РасширеннаяПодсказка" id="35"/>
+				</InputField>
+				<InputField name="ПроводкиСубконтоДт2" id="36">
+					<DataPath>Проводки.СубконтоДт2</DataPath>
+					<ContextMenu name="ПроводкиСубконтоДт2КонтекстноеМеню" id="37"/>
+					<ExtendedTooltip name="ПроводкиСубконтоДт2РасширеннаяПодсказка" id="38"/>
+				</InputField>
+				<InputField name="ПроводкиКоличествоДт" id="39">
+					<DataPath>Проводки.КоличествоДт</DataPath>
+					<ContextMenu name="ПроводкиКоличествоДтКонтекстноеМеню" id="40"/>
+					<ExtendedTooltip name="ПроводкиКоличествоДтРасширеннаяПодсказка" id="41"/>
+				</InputField>
+				<InputField name="ПроводкиСчетКт" id="42">
+					<DataPath>Проводки.СчетКт</DataPath>
+					<ContextMenu name="ПроводкиСчетКтКонтекстноеМеню" id="43"/>
+					<ExtendedTooltip name="ПроводкиСчетКтРасширеннаяПодсказка" id="44"/>
+				</InputField>
+				<InputField name="ПроводкиСубконтоКт1" id="45">
+					<DataPath>Проводки.СубконтоКт1</DataPath>
+					<ContextMenu name="ПроводкиСубконтоКт1КонтекстноеМеню" id="46"/>
+					<ExtendedTooltip name="ПроводкиСубконтоКт1РасширеннаяПодсказка" id="47"/>
+				</InputField>
+				<InputField name="ПроводкиСубконтоКт2" id="48">
+					<DataPath>Проводки.СубконтоКт2</DataPath>
+					<ContextMenu name="ПроводкиСубконтоКт2КонтекстноеМеню" id="49"/>
+					<ExtendedTooltip name="ПроводкиСубконтоКт2РасширеннаяПодсказка" id="50"/>
+				</InputField>
+				<InputField name="ПроводкиКоличествоКт" id="51">
+					<DataPath>Проводки.КоличествоКт</DataPath>
+					<ContextMenu name="ПроводкиКоличествоКтКонтекстноеМеню" id="52"/>
+					<ExtendedTooltip name="ПроводкиКоличествоКтРасширеннаяПодсказка" id="53"/>
+				</InputField>
+				<InputField name="ПроводкиСумма" id="54">
+					<DataPath>Проводки.Сумма</DataPath>
+					<ContextMenu name="ПроводкиСуммаКонтекстноеМеню" id="55"/>
+					<ExtendedTooltip name="ПроводкиСуммаРасширеннаяПодсказка" id="56"/>
+				</InputField>
+			</ChildItems>
+		</Table>
+	</ChildItems>
+	<Attributes>
+		<Attribute name="Объект" id="1">
+			<Type>
+				<v8:Type>cfg:DocumentObject.Операция</v8:Type>
+			</Type>
+			<MainAttribute>true</MainAttribute>
+			<SavedData>true</SavedData>
+		</Attribute>
+		<Attribute name="Проводки" id="2">
+			<Title>
+				<v8:item>
+					<v8:lang>ru</v8:lang>
+					<v8:content>Проводки</v8:content>
+				</v8:item>
+			</Title>
+			<Type>
+				<v8:Type>cfg:AccountingRegisterRecordSet.Управленческий</v8:Type>
+			</Type>
+			<SavedData>true</SavedData>
+		</Attribute>
+	</Attributes>
+</Form>
