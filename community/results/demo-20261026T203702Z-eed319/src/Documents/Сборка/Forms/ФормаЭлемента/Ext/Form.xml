@@ -1,0 +1,254 @@
+﻿<?xml version="1.0" encoding="UTF-8"?>
+<Form xmlns="http://v8.1c.ru/8.3/xcf/logform" xmlns:app="http://v8.1c.ru/8.2/managed-application/core" xmlns:cfg="http://v8.1c.ru/8.1/data/enterprise/current-config" xmlns:dcscor="http://v8.1c.ru/8.1/data-composition-system/core" xmlns:dcsset="http://v8.1c.ru/8.1/data-composition-system/settings" xmlns:ent="http://v8.1c.ru/8.1/data/enterprise" xmlns:lf="http://v8.1c.ru/8.2/managed-application/logform" xmlns:style="http://v8.1c.ru/8.1/data/ui/style" xmlns:sys="http://v8.1c.ru/8.1/data/ui/fonts/system" xmlns:v8="http://v8.1c.ru/8.1/data/core" xmlns:v8ui="http://v8.1c.ru/8.1/data/ui" xmlns:web="http://v8.1c.ru/8.1/data/ui/colors/web" xmlns:win="http://v8.1c.ru/8.1/data/ui/colors/windows" xmlns:xr="http://v8.1c.ru/8.3/xcf/readable" xmlns:xs="http://www.w3.org/2001/XMLSchema" xmlns:xsi="http://www.w3.org/2001/XMLSchema-instance" version="2.20">
+	<Title>
+		<v8:item>
+			<v8:lang>ru</v8:lang>
+			<v8:content>Сборка</v8:content>
+		</v8:item>
+	</Title>
+	<AutoTitle>false</AutoTitle>
+	<AutoTime>CurrentOrLast</AutoTime>
+	<UsePostingMode>Auto</UsePostingMode>
+	<RepostOnWrite>true</RepostOnWrite>
+	<AutoCommandBar name="ФормаКоманднаяПанель" id="-1"/>
+	<ChildItems>
+		<Pages name="ГруппаСтраницы" id="1">
+			<PagesRepresentation>TabsOnTop</PagesRepresentation>
+			<ExtendedTooltip name="ГруппаСтраницыРасширеннаяПодсказка" id="2"/>
+			<ChildItems>
+				<Page name="ГруппаОсновное" id="3">
+					<Title>
+						<v8:item>
+							<v8:lang>ru</v8:lang>
+							<v8:content>Основное</v8:content>
+						</v8:item>
+					</Title>
+					<ExtendedTooltip name="ГруппаОсновноеРасширеннаяПодсказка" id="4"/>
+					<ChildItems>
+						<UsualGroup name="ГруппаШапка" id="5">
+							<Group>Horizontal</Group>
+							<Representation>None</Representation>
+							<ShowTitle>false</ShowTitle>
+							<ExtendedTooltip name="ГруппаШапкаРасширеннаяПодсказка" id="6"/>
+							<ChildItems>
+								<UsualGroup name="ГруппаШапкаЛево" id="7">
+									<Group>Vertical</Group>
+									<ShowTitle>false</ShowTitle>
+									<ExtendedTooltip name="ГруппаШапкаЛевоРасширеннаяПодсказка" id="8"/>
+									<ChildItems>
+										<UsualGroup name="ГруппаНомерДата" id="9">
+											<Group>Horizontal</Group>
+											<ShowTitle>false</ShowTitle>
+											<ExtendedTooltip name="ГруппаНомерДатаРасширеннаяПодсказка" id="10"/>
+											<ChildItems>
+												<InputField name="Номер" id="11">
+													<DataPath>Объект.Number</DataPath>
+													<Width>9</Width>
+													<AutoMaxWidth>false</AutoMaxWidth>
+													<ContextMenu name="НомерКонтекстноеМеню" id="12"/>
+													<ExtendedTooltip name="НомерРасширеннаяПодсказка" id="13"/>
+												</InputField>
+												<InputField name="Дата" id="14">
+													<DataPath>Объект.Date</DataPath>
+													<Title>
+														<v8:item>
+															<v8:lang>ru</v8:lang>
+															<v8:content>от</v8:content>
+														</v8:item>
+													</Title>
+													<ContextMenu name="ДатаКонтекстноеМеню" id="15"/>
+													<ExtendedTooltip name="ДатаРасширеннаяПодсказка" id="16"/>
+												</InputField>
+											</ChildItems>
+										</UsualGroup>
+										<InputField name="ПодразделениеИсточник" id="17">
+											<DataPath>Объект.ПодразделениеИсточник</DataPath>
+											<ContextMenu name="ПодразделениеИсточникКонтекстноеМеню" id="18"/>
+											<ExtendedTooltip name="ПодразделениеИсточникРасширеннаяПодсказка" id="19"/>
+										</InputField>
+									</ChildItems>
+								</UsualGroup>
+								<UsualGroup name="ГруппаШапкаПраво" id="20">
+									<Group>Vertical</Group>
+									<ShowTitle>false</ShowTitle>
+									<ExtendedTooltip name="ГруппаШапкаПравоРасширеннаяПодсказка" id="21"/>
+									<ChildItems>
+										<InputField name="ПодразделениеПолучатель" id="22">
+											<DataPath>Объект.ПодразделениеПолучатель</DataPath>
+											<ContextMenu name="ПодразделениеПолучательКонтекстноеМеню" id="23"/>
+											<ExtendedTooltip name="ПодразделениеПолучательРасширеннаяПодсказка" id="24"/>
+										</InputField>
+									</ChildItems>
+								</UsualGroup>
+							</ChildItems>
+						</UsualGroup>
+					</ChildItems>
+				</Page>
+				<Page name="ГруппаСистемныеБлоки" id="25">
+					<Title>
+						<v8:item>
+							<v8:lang>ru</v8:lang>
+							<v8:content>Системные блоки</v8:content>
+						</v8:item>
+					</Title>
+					<ExtendedTooltip name="ГруппаСистемныеБлокиРасширеннаяПодсказка" id="26"/>
+					<ChildItems>
+						<Table name="СистемныеБлоки" id="27">
+							<DataPath>Объект.СистемныеБлоки</DataPath>
+							<RowFilter xsi:nil="true"/>
+							<ContextMenu name="СистемныеБлокиКонтекстноеМеню" id="28"/>
+							<AutoCommandBar name="СистемныеБлокиКоманднаяПанель" id="29"/>
+							<ExtendedTooltip name="СистемныеБлокиРасширеннаяПодсказка" id="30"/>
+							<SearchStringAddition name="СистемныеБлокиСтрокаПоиска" id="31">
+								<AdditionSource>
+									<Item>СистемныеБлоки</Item>
+									<Type>SearchStringRepresentation</Type>
+								</AdditionSource>
+								<ContextMenu name="СистемныеБлокиСтрокаПоискаКонтекстноеМеню" id="32"/>
+								<ExtendedTooltip name="СистемныеБлокиСтрокаПоискаРасширеннаяПодсказка" id="33"/>
+							</SearchStringAddition>
+							<ViewStatusAddition name="СистемныеБлокиСостояниеПросмотра" id="34">
+								<AdditionSource>
+									<Item>СистемныеБлоки</Item>
+									<Type>ViewStatusRepresentation</Type>
+								</AdditionSource>
+								<ContextMenu name="СистемныеБлокиСостояниеПросмотраКонтекстноеМеню" id="35"/>
+								<ExtendedTooltip name="СистемныеБлокиСостояниеПросмотраРасширеннаяПодсказка" id="36"/>
+							</ViewStatusAddition>
+							<SearchControlAddition name="СистемныеБлокиУправлениеПоиском" id="37">
+								<AdditionSource>
+									<Item>СистемныеБлоки</Item>
+									<Type>SearchControl</Type>
+								</AdditionSource>
+								<ContextMenu name="СистемныеБлокиУправлениеПоискомКонтекстноеМеню" id="38"/>
+								<ExtendedTooltip name="СистемныеБлокиУправлениеПоискомРасширеннаяПодсказка" id="39"/>
+							</SearchControlAddition>
+							<ChildItems>
+								<LabelField name="СистемныеБлокиНомерСтроки" id="40">
+									<DataPath>Объект.СистемныеБлоки.LineNumber</DataPath>
+									<ContextMenu name="СистемныеБлокиНомерСтрокиКонтекстноеМеню" id="41"/>
+									<ExtendedTooltip name="СистемныеБлокиНомерСтрокиРасширеннаяПодсказка" id="42"/>
+								</LabelField>
+								<InputField name="СистемныеБлокиНоменклатура" id="43">
+									<DataPath>Объект.СистемныеБлоки.Номенклатура</DataPath>
+									<ContextMenu name="СистемныеБлокиНоменклатураКонтекстноеМеню" id="44"/>
+									<ExtendedTooltip name="СистемныеБлокиНоменклатураРасширеннаяПодсказка" id="45"/>
+								</InputField>
+								<InputField name="СистемныеБлокиКоличество" id="46">
+									<DataPath>Объект.СистемныеБлоки.Количество</DataPath>
+									<ContextMenu name="СистемныеБлокиКоличествоКонтекстноеМеню" id="47"/>
+									<ExtendedTooltip name="СистемныеБлокиКоличествоРасширеннаяПодсказка" id="48"/>
+								</InputField>
+							</ChildItems>
+						</Table>
+					</ChildItems>
+				</Page>
+				<Page name="ГруппаДополнительныеДетали" id="49">
+					<Title>
+						<v8:item>
+							<v8:lang>ru</v8:lang>
+							<v8:content>Дополнительные детали</v8:content>
+						</v8:item>
+					</Title>
+					<ExtendedTooltip name="ГруппаДополнительныеДеталиРасширеннаяПодсказка" id="50"/>
+					<ChildItems>
+						<Table name="ДополнительныеДетали" id="51">
+							<DataPath>Объект.ДополнительныеДетали</DataPath>
+							<RowFilter xsi:nil="true"/>
+							<ContextMenu name="ДополнительныеДеталиКонтекстноеМеню" id="52"/>
+							<AutoCommandBar name="ДополнительныеДеталиКоманднаяПанель" id="53"/>
+							<ExtendedTooltip name="ДополнительныеДеталиРасширеннаяПодсказка" id="54"/>
+							<SearchStringAddition name="ДополнительныеДеталиСтрокаПоиска" id="55">
+								<AdditionSource>
+									<Item>ДополнительныеДетали</Item>
+									<Type>SearchStringRepresentation</Type>
+								</AdditionSource>
+								<ContextMenu name="ДополнительныеДеталиСтрокаПоискаКонтекстноеМеню" id="56"/>
+								<ExtendedTooltip name="ДополнительныеДеталиСтрокаПоискаРасширеннаяПодсказка" id="57"/>
+							</SearchStringAddition>
+							<ViewStatusAddition name="ДополнительныеДеталиСостояниеПросмотра" id="58">
+								<AdditionSource>
+									<Item>ДополнительныеДетали</Item>
+									<Type>ViewStatusRepresentation</Type>
+								</AdditionSource>
+								<ContextMenu name="ДополнительныеДеталиСостояниеПросмотраКонтекстноеМеню" id="59"/>
+								<ExtendedTooltip name="ДополнительныеДеталиСостояниеПросмотраРасширеннаяПодсказка" id="60"/>
+							</ViewStatusAddition>
+							<SearchControlAddition name="ДополнительныеДеталиУправлениеПоиском" id="61">
+								<AdditionSource>
+									<Item>ДополнительныеДетали</Item>
+									<Type>SearchControl</Type>
+								</AdditionSource>
+								<ContextMenu name="ДополнительныеДеталиУправлениеПоискомКонтекстноеМеню" id="62"/>
+								<ExtendedTooltip name="ДополнительныеДеталиУправлениеПоискомРасширеннаяПодсказка" id="63"/>
+							</SearchControlAddition>
+							<ChildItems>
+								<LabelField name="ДополнительныеДеталиНомерСтроки" id="64">
+									<DataPath>Объект.ДополнительныеДетали.LineNumber</DataPath>
+									<ContextMenu name="ДополнительныеДеталиНомерСтрокиКонтекстноеМеню" id="65"/>
+									<ExtendedTooltip name="ДополнительныеДеталиНомерСтрокиРасширеннаяПодсказка" id="66"/>
+								</LabelField>
+								<InputField name="ДополнительныеДеталиНоменклатура" id="67">
+									<DataPath>Объект.ДополнительныеДетали.Номенклатура</DataPath>
+									<ContextMenu name="ДополнительныеДеталиНоменклатураКонтекстноеМеню" id="68"/>
+									<ExtendedTooltip name="ДополнительныеДеталиНоменклатураРасширеннаяПодсказка" id="69"/>
+								</InputField>
+								<InputField name="ДополнительныеДеталиСвойство" id="70">
+									<DataPath>Объект.ДополнительныеДетали.Свойство</DataPath>
+									<ContextMenu name="ДополнительныеДеталиСвойствоКонтекстноеМеню" id="71"/>
+									<ExtendedTooltip name="ДополнительныеДеталиСвойствоРасширеннаяПодсказка" id="72"/>
+								</InputField>
+								<InputField name="ДополнительныеДеталиКоличество" id="73">
+									<DataPath>Объект.ДополнительныеДетали.Количество</DataPath>
+									<ContextMenu name="ДополнительныеДеталиКоличествоКонтекстноеМеню" id="74"/>
+									<ExtendedTooltip name="ДополнительныеДеталиКоличествоРасширеннаяПодсказка" id="75"/>
+								</InputField>
+							</ChildItems>
+						</Table>
+					</ChildItems>
+				</Page>
+				<Page name="ГруппаДополнительно" id="76">
+					<Title>
+						<v8:item>
+							<v8:lang>ru</v8:lang>
+							<v8:content>Дополнительно</v8:content>
+						</v8:item>
+					</Title>
+					<ExtendedTooltip name="ГруппаДополнительноРасширеннаяПодсказка" id="77"/>
+					<ChildItems>
+						<UsualGroup name="ГруппаПараметры" id="78">
+							<Group>Horizontal</Group>
+							<ShowTitle>false</ShowTitle>
+							<ExtendedTooltip name="ГруппаПараметрыРасширеннаяПодсказка" id="79"/>
+							<ChildItems>
+								<UsualGroup name="ГруппаПараметрыЛево" id="80">
+									<Group>Vertical</Group>
+									<ShowTitle>false</ShowTitle>
+									<ExtendedTooltip name="ГруппаПараметрыЛевоРасширеннаяПодсказка" id="81"/>
+								</UsualGroup>
+								<UsualGroup name="ГруппаПараметрыПраво" id="82">
+									<Group>Vertical</Group>
+									<ShowTitle>false</ShowTitle>
+									<ExtendedTooltip name="ГруппаПараметрыПравоРасширеннаяПодсказка" id="83"/>
+								</UsualGroup>
+							</ChildItems>
+						</UsualGroup>
+						<UsualGroup name="ГруппаДополнительныеРеквизиты" id="84">
+							<Group>Vertical</Group>
+							<ExtendedTooltip name="ГруппаДополнительныеРеквизитыРасширеннаяПодсказка" id="85"/>
+						</UsualGroup>
+					</ChildItems>
+				</Page>
+			</ChildItems>
+		</Pages>
+	</ChildItems>
+	<Attributes>
+		<Attribute name="Объект" id="86">
+			<Type>
+				<v8:Type>cfg:DocumentObject.Сборка</v8:Type>
+			</Type>
+			<MainAttribute>true</MainAttribute>
+			<SavedData>true</SavedData>
+		</Attribute>
+	</Attributes>
+</Form>
