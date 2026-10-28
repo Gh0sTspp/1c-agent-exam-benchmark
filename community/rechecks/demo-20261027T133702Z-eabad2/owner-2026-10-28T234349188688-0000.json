@@ -1,0 +1,824 @@
+{
+  "schema_version": 1,
+  "submission_id": "demo-20261027T133702Z-eabad2",
+  "original_manifest_sha256": "9acd6edd21ed2727cf47be8b4b934079e2cc407db8704a9c6fd00e736bd8ec77",
+  "owner_verification": {
+    "kind": "repository_owner",
+    "repository": "zeegin/1c-agent-exam-benchmark",
+    "operator": {
+      "name": "Ingvar Vilkman",
+      "github": "zeegin"
+    },
+    "started_at": "2026-10-28T23:40:55.903890+00:00",
+    "server": {
+      "name": "Owner Windows stand",
+      "os": {
+        "system": "Windows",
+        "release": "11",
+        "version": "10.0.26300",
+        "architecture": "AMD64"
+      },
+      "hardware": {
+        "cpu": "AMD Ryzen 7 5800X 8-Core Processor             ",
+        "logical_cpus": 4,
+        "ram_bytes": 17109000192
+      },
+      "isolation": "dedicated-host"
+    },
+    "platform_version": "8.3.27.2342",
+    "grader": {
+      "profile": "technical-v8",
+      "commit": "968d55202c381e8a8aa21ffb9e6ab941b65af16b",
+      "working_tree_dirty": false,
+      "fingerprint": {
+        "assessment.py": "d78e2b1ae097234ec7ab6a3ca89c39e1a861492eb761bc03cfdf9177125a35ea",
+        "bp.py": "400a2b3761ea0e4e73d3779861def780c84f942a2986023455d1d25b740967ec",
+        "calcwrite.py": "5cfe385d8579c86ccf9ff101bb81d27caadde108e405c75bd7b6fe87ffe03509",
+        "calibrate.py": "84150444e05d0d388a977bc9a92c0348cc49cb381acfbe82311aa499b0172172",
+        "calibration.py": "478823112d10e26ebae086166031cad575b736e80540165b771e95e9e913245c",
+        "calibration_characteristics.py": "f86710f7cd5063d098a265a8154310cd6e4a304cfc217a8d6ecd35da86600062",
+        "calibration_characteristics_forms.py": "0bf7a2d2d0c0c074c87f8b4bfa2202fab6afb2f5f610ff5fab2bef407693b8ef",
+        "calibration_forms.py": "d9580fa73a9ebf609187450c7ba2f765cf98eedf7455234c2dd64802397fc014",
+        "calibration_interface.py": "9585b07b6638835fbc184a2b3faad2184e1f88e3dbd915766aaf7d8e0b5f3c1c",
+        "calibration_ou.py": "a17bbacecb7f3990126387cefa65ca5b31aa99560c934e6a32dd8d9ffd6ca47d",
+        "calibration_periodicity.py": "c4374672426ac39cd5e722644d5355fe4509a750f0f2b4d27320cf17c3f0f943",
+        "calibration_pr.py": "403ee5cb14adb1020b723eae4396a7f48b83dbf8350f85c122e12a8c8df6d5f4",
+        "calibration_query.py": "3555b103cde8ea0519955cf52358d09223f5ab183a9df00533bdb48c89237a8c",
+        "claude.py": "5bae98af6e2021e2718afa3a71ed04bee812deaae31a43d4e7324814139ccc82",
+        "codescan.py": "6d8375210cef1fd768fc2d98d630d880b2993a9724f01ae25f33b4ea5aa9631d",
+        "codex.py": "904e75503cd35f16cbb052f66806b3879fe25bfc9f99e33b93c889d862c46324",
+        "common.py": "d36cbf969d9ca7292d02ccc69c23e474add77857bbabc6a764e93fc90a2fdf4a",
+        "docx_text.py": "556f636b574f898a8c1a404d33515ed272655af325510a2a2ea196932ba43840",
+        "examiner.py": "8cdffcdd52f043c905f896697403380af95bf485dd4a5edca24f7956e7795ffe",
+        "forms.py": "362769c7f4fb93b8b7ef31004fb7717e26b5b43ee23d93fd3b9ea38c8f808daa",
+        "gates.py": "0512fc16c20ab6632ab763044007cd805fb17147ace38109004994d6ad62b0b3",
+        "grader.py": "de63485213673a55cea4020c22c42b232f44d3d3dd491d0ce986652d02637355",
+        "harness.py": "3cbb90fd3187e700b5df32e5daafb20313d49bb5721c826e3033cbc6aa6e3825",
+        "interface.py": "b12121013e915c912550a3582a09e47e2e930f4b3995f1047eb63888561396dc",
+        "interpretations.py": "d1c8e1d43f9cd89eb17afdd63f4a961b85dca39622e4f8150bf85d2274e45836",
+        "isolation.py": "cfc12a0595622a930662457aa88c778d11f12b112e5340293a8452b8791fbcd7",
+        "locking.py": "98aa0cfb3f65adaed674f9c70f3f18be57d8d0481240de46b54ef06a390d09b9",
+        "materials.py": "ee1691579ce68e2ddf9e952cf7f412ffafda2dfefacf51b7b295ae681c5d476b",
+        "mcp_toolkit.py": "400e25973f39059e24071e88630095e2a52c6472dc29040a57cfc4518b8862b7",
+        "observer.py": "f0c92a814a495ef876259b310b78c408a92b8f0935de3a6b14f3b959fe442d2d",
+        "ou.py": "0cb7a3c1511743d879a5a7db12f47f20dd159298f41c61197424727945b35922",
+        "penalties.py": "ae388cb8953ecca1f2370a7c4cb1db3b6cc8318fc2a7563a4db15f9f5b057429",
+        "platform.py": "c8eafb66348ff505565956d97c1dfbb54ba6a91bd99f1f3ca40a2fb57ba5c2d7",
+        "portable_harnesses.py": "b7855982f5191e23ff98ca07eec12262123ce06efe23e12afa52ad88595ece83",
+        "pr.py": "2b6bfea0634703469605ce114f9274716b485852d9a55d9185c39893b14e4726",
+        "preflight.py": "448c3120ab64b625abae3891be686c7a214ce4211f7cf651fd90e12c0b298433",
+        "process.py": "9bd42380092692109d822ba6ff13bd1801c2b6f301743ef77415cfba2158cedd",
+        "queries.py": "1ef57e292db3e8967a733948371ecc542f743b811890d4fc509df17303b9c4ac",
+        "queryschema.py": "5f6fce7f25da3cfa27486f6c35d903c06337439bcb2789cee9a8ca525319a2db",
+        "querytypes.py": "b645f489a2abc27762b4a9bbf4917e72f7b46dc053a74c0dca4a8fc46491b3ef",
+        "replay_calibration.py": "7f675c0979fff66ac3bbe0154d95e75a3023d63d15926d1b0fd57c6832164c74",
+        "runtime.py": "bf63004e76749719d6c9b790d1ca6dc7536be1b5e42ef564a0b9f7c18c4c6edf",
+        "smoke_check.py": "d1f463eae897f25b0647b511a4b146674d53190e80f11cbf0e2da0f744279cac",
+        "stdio_harnesses.py": "a977ac241c8eaab388c08a85aaa674dbb8506c07f3e10325b243429cc07177a7",
+        "submission.py": "caffc29276c5d562e33ddb73f7d3575b6bf8605e699fe198617dc75fcb8253a1",
+        "telemetry.py": "e79aa598ddf51260ce99bf2e45f00f2c5120aa8455690d15dd33e4a2076933ea",
+        "windows_job.py": "c5ee52e2413c4faee8d6c92064c2138a755124a3299c283d19c8e94fe9ead790",
+        "workspaces.py": "96f988b42492d7d7b62b9e809c788e6c39debc285a6d0b8cbc01aa51616e85af",
+        "tasks/1c-platform-official-sample/checks.json": "7447a9b42d3e348d29d07f001cfb6bd269acd953b7117eba7cca2ce9f5a9a60d",
+        "tasks/1c-platform-official-sample/private/official-assessment-mapping.json": "303587c0dabe77c1eeebb2017fe85539e3370b17c9090435e6e0325a66bd0644",
+        "tasks/1c-platform-official-sample/private/owner-scoring-policy.json": "d26d534bb838ab1b5facb7bc033ca8ec40912133baadcdbad83b27fc577905f5",
+        "starters/carcass-8.3.25.1445/starter.json": "0f7a7060885ba99a19402bfc6e63cc8fe979b0f491b040d3a01d5d21b304b3a6",
+        "rules/1c-specialist-platform/rules.json": "ea75e34ace5de11ba3de403c63cd2c026db81d1d991f8531e4a779d4ce9788e7",
+        "rules/1c-specialist-platform/examiner.json": "1247486ddd412d600db88d9c1db4ba501fc1994afd1dc2ebe85402fcc332f4c8",
+        "rules/1c-specialist-platform/chistov.json": "800da27601a3f1c7ec1df64482fd4ad035e559ba0b390a274ed5031128487d3d",
+        "rules/1c-specialist-platform/standards.json": "ed8af01d02edc604885530a3084d06ebe32b4cc8c4ae47e0798b79adb6ae6a26"
+      },
+      "sha256": "9b8cf5a444a2a31cc2f2f321184145835198162b5f3b1361372df37ed07c1659"
+    },
+    "completed_at": "2026-10-28T23:43:49.188688+00:00"
+  },
+  "result": {
+    "run_id": "demo-20261027T133702Z-eabad2",
+    "created_at": "2026-10-28T23:43:49.188688+00:00",
+    "model": "gpt-6.1-terra",
+    "harness": "none",
+    "solve_seconds": 1797,
+    "platform": "8.3.27.2130",
+    "counts": {
+      "pass": 53,
+      "fail": 6,
+      "inconclusive": 6
+    },
+    "rules": [
+      {
+        "id": "BU01",
+        "verdict": "pass",
+        "reason": null,
+        "coverage": "selected_fixture",
+        "assertion_id": "BU01.selected_fixture"
+      },
+      {
+        "id": "BU04",
+        "verdict": "pass",
+        "reason": null,
+        "coverage": "selected_fixture",
+        "assertion_id": "BU04.selected_fixture"
+      },
+      {
+        "id": "BU05",
+        "verdict": "pass",
+        "reason": null,
+        "coverage": "selected_fixture",
+        "assertion_id": "BU05.selected_fixture"
+      },
+      {
+        "id": "BU16",
+        "verdict": "pass",
+        "reason": null,
+        "coverage": "selected_fixture",
+        "assertion_id": "BU16.selected_fixture"
+      },
+      {
+        "id": "BU17",
+        "verdict": "pass",
+        "reason": null,
+        "coverage": "selected_fixture",
+        "assertion_id": "BU17.selected_fixture"
+      },
+      {
+        "id": "BU02",
+        "verdict": "pass",
+        "reason": null,
+        "coverage": "partial",
+        "assertion_id": "BU02.posting_cost_and_balance"
+      },
+      {
+        "id": "BU10",
+        "verdict": "pass",
+        "reason": null,
+        "coverage": "selected_fixture",
+        "assertion_id": "BU10.selected_fixture"
+      },
+      {
+        "id": "BU12",
+        "verdict": "pass",
+        "reason": null,
+        "coverage": "selected_fixture",
+        "assertion_id": "BU12.selected_fixture"
+      },
+      {
+        "id": "BU03",
+        "verdict": "pass",
+        "reason": null,
+        "coverage": "selected_fixture",
+        "assertion_id": "BU03.selected_fixture"
+      },
+      {
+        "id": "BU06",
+        "verdict": "pass",
+        "reason": null,
+        "coverage": "selected_fixture",
+        "assertion_id": "BU06.selected_fixture"
+      },
+      {
+        "id": "BU07",
+        "verdict": "pass",
+        "reason": null,
+        "coverage": "selected_fixture",
+        "assertion_id": "BU07.selected_fixture"
+      },
+      {
+        "id": "BU08",
+        "verdict": "pass",
+        "reason": null,
+        "coverage": "selected_fixture",
+        "assertion_id": "BU08.selected_fixture"
+      },
+      {
+        "id": "BU09",
+        "verdict": "pass",
+        "reason": null,
+        "coverage": "selected_fixture",
+        "assertion_id": "BU09.selected_fixture"
+      },
+      {
+        "id": "BU11",
+        "verdict": "pass",
+        "reason": null,
+        "coverage": "selected_fixture",
+        "assertion_id": "BU11.selected_fixture"
+      },
+      {
+        "id": "BU14",
+        "verdict": "pass",
+        "reason": null,
+        "coverage": "selected_fixture",
+        "assertion_id": "BU14.selected_fixture"
+      },
+      {
+        "id": "BU15",
+        "verdict": "pass",
+        "reason": null,
+        "coverage": "selected_fixture",
+        "assertion_id": "BU15.selected_fixture"
+      },
+      {
+        "id": "BU13",
+        "verdict": "pass",
+        "reason": null,
+        "coverage": "selected_fixture",
+        "assertion_id": "BU13.selected_fixture"
+      },
+      {
+        "id": "OU15",
+        "verdict": "pass",
+        "reason": null,
+        "coverage": "selected_fixture",
+        "assertion_id": "OU15.selected_fixture"
+      },
+      {
+        "id": "OU16",
+        "verdict": "pass",
+        "reason": null,
+        "coverage": "selected_fixture",
+        "assertion_id": "OU16.selected_fixture"
+      },
+      {
+        "id": "OU17",
+        "verdict": "pass",
+        "reason": null,
+        "coverage": "selected_fixture",
+        "assertion_id": "OU17.selected_fixture"
+      },
+      {
+        "id": "OU02",
+        "verdict": "pass",
+        "reason": null,
+        "coverage": "selected_fixture",
+        "assertion_id": "OU02.selected_fixture"
+      },
+      {
+        "id": "OU18",
+        "verdict": "pass",
+        "reason": null,
+        "coverage": "selected_fixture",
+        "assertion_id": "OU18.selected_fixture"
+      },
+      {
+        "id": "OU14",
+        "verdict": "pass",
+        "reason": null,
+        "coverage": "selected_fixture",
+        "assertion_id": "OU14.selected_fixture"
+      },
+      {
+        "id": "OU01",
+        "verdict": "pass",
+        "reason": null,
+        "coverage": "selected_fixture",
+        "assertion_id": "OU01.selected_fixture"
+      },
+      {
+        "id": "OU03",
+        "verdict": "pass",
+        "reason": "История и годовая периодичность регистра подтверждены.",
+        "coverage": "history_and_periodicity",
+        "assertion_id": "OU03.selected_fixture"
+      },
+      {
+        "id": "OU05",
+        "verdict": "pass",
+        "reason": null,
+        "coverage": "selected_fixture",
+        "assertion_id": "OU05.selected_fixture"
+      },
+      {
+        "id": "OU06",
+        "verdict": "pass",
+        "reason": null,
+        "coverage": "no_violation_found",
+        "assertion_id": "OU06.selected_fixture"
+      },
+      {
+        "id": "OU07",
+        "verdict": "pass",
+        "reason": null,
+        "coverage": "selected_fixture",
+        "assertion_id": "OU07.selected_fixture"
+      },
+      {
+        "id": "OU08",
+        "verdict": "pass",
+        "reason": "История и дневная периодичность подтверждены; ограничение одной версии в неделю отдельно не проверяется.",
+        "coverage": "history_and_periodicity",
+        "assertion_id": "OU08.selected_fixture"
+      },
+      {
+        "id": "OU09",
+        "verdict": "pass",
+        "reason": null,
+        "coverage": "selected_fixture",
+        "assertion_id": "OU09.selected_fixture"
+      },
+      {
+        "id": "OU10",
+        "verdict": "pass",
+        "reason": null,
+        "coverage": "selected_fixture",
+        "assertion_id": "OU10.selected_fixture"
+      },
+      {
+        "id": "OU11",
+        "verdict": "pass",
+        "reason": null,
+        "coverage": "selected_fixture",
+        "assertion_id": "OU11.selected_fixture"
+      },
+      {
+        "id": "OU12",
+        "verdict": "pass",
+        "reason": null,
+        "coverage": "selected_fixture",
+        "assertion_id": "OU12.selected_fixture"
+      },
+      {
+        "id": "OU13",
+        "verdict": "pass",
+        "reason": null,
+        "coverage": "selected_fixture",
+        "assertion_id": "OU13.selected_fixture"
+      },
+      {
+        "id": "OU04",
+        "verdict": "pass",
+        "reason": null,
+        "coverage": "selected_fixture",
+        "assertion_id": "OU04.selected_fixture"
+      },
+      {
+        "id": "OU19",
+        "verdict": "pass",
+        "reason": null,
+        "coverage": "selected_fixture",
+        "assertion_id": "OU19.selected_fixture"
+      },
+      {
+        "id": "OU20",
+        "verdict": "fail",
+        "reason": null,
+        "coverage": "selected_fixture",
+        "assertion_id": "OU20.selected_fixture"
+      },
+      {
+        "id": "OU21",
+        "verdict": "pass",
+        "reason": null,
+        "coverage": "selected_fixture",
+        "assertion_id": "OU21.selected_fixture"
+      },
+      {
+        "id": "PR01",
+        "verdict": "pass",
+        "reason": null,
+        "coverage": "selected_fixture",
+        "assertion_id": "PR01.selected_fixture"
+      },
+      {
+        "id": "PR02",
+        "verdict": "pass",
+        "reason": null,
+        "coverage": "selected_fixture",
+        "assertion_id": "PR02.selected_fixture"
+      },
+      {
+        "id": "PR03",
+        "verdict": "pass",
+        "reason": null,
+        "coverage": "selected_fixture",
+        "assertion_id": "PR03.selected_fixture"
+      },
+      {
+        "id": "PR04",
+        "verdict": "pass",
+        "reason": null,
+        "coverage": "selected_fixture",
+        "assertion_id": "PR04.selected_fixture"
+      },
+      {
+        "id": "PR05",
+        "verdict": "pass",
+        "reason": null,
+        "coverage": "selected_fixture",
+        "assertion_id": "PR05.selected_fixture"
+      },
+      {
+        "id": "PR06",
+        "verdict": "pass",
+        "reason": null,
+        "coverage": "selected_fixture",
+        "assertion_id": "PR06.selected_fixture"
+      },
+      {
+        "id": "PR07",
+        "verdict": "inconclusive",
+        "reason": "Required observations unavailable: scale could not be written: {ОбщийМодуль.BenchmarkObserver.Модуль(814)}: Ошибка при вызове метода контекста (Записать): Запись не верна! Значение поля \"Стаж\" не может быть пустым",
+        "coverage": "selected_fixture",
+        "assertion_id": "PR07.selected_fixture"
+      },
+      {
+        "id": "PR08",
+        "verdict": "inconclusive",
+        "reason": "Required observations unavailable: scale could not be written: {ОбщийМодуль.BenchmarkObserver.Модуль(814)}: Ошибка при вызове метода контекста (Записать): Запись не верна! Значение поля \"Стаж\" не может быть пустым",
+        "coverage": "selected_fixture",
+        "assertion_id": "PR08.selected_fixture"
+      },
+      {
+        "id": "PR09",
+        "verdict": "inconclusive",
+        "reason": "Required observations unavailable: scale could not be written: {ОбщийМодуль.BenchmarkObserver.Модуль(814)}: Ошибка при вызове метода контекста (Записать): Запись не верна! Значение поля \"Стаж\" не может быть пустым",
+        "coverage": "selected_fixture",
+        "assertion_id": "PR09.selected_fixture"
+      },
+      {
+        "id": "PR10",
+        "verdict": "inconclusive",
+        "reason": "Required observations unavailable: scale could not be written: {ОбщийМодуль.BenchmarkObserver.Модуль(814)}: Ошибка при вызове метода контекста (Записать): Запись не верна! Значение поля \"Стаж\" не может быть пустым",
+        "coverage": "selected_fixture",
+        "assertion_id": "PR10.selected_fixture"
+      },
+      {
+        "id": "PR11",
+        "verdict": "fail",
+        "reason": "pr_trip E4/B trip: 379.98, expected 421.13 (one rate for the trip) or 469.95 (own rate in each month)",
+        "coverage": "selected_fixture",
+        "assertion_id": "PR11.selected_fixture"
+      },
+      {
+        "id": "PR12",
+        "verdict": "inconclusive",
+        "reason": "Trip amount wrong for an undetermined reason; the defect is charged once under PR11. pr_trip E4/B trip: 379.98, expected 421.13 (one rate for the trip) or 469.95 (own rate in each month)",
+        "coverage": "selected_fixture",
+        "assertion_id": "PR12.selected_fixture"
+      },
+      {
+        "id": "PR13",
+        "verdict": "fail",
+        "reason": "pr_backdate E4/B tariff 2025-01: 2160, expected 1680.00; pr_backdate E4/B tariff 2025-02: 1920, expected 1680.00; trip entered back-dated: 463.06, entered in order: 379.98",
+        "coverage": "selected_fixture",
+        "assertion_id": "PR13.selected_fixture"
+      },
+      {
+        "id": "PR14",
+        "verdict": "pass",
+        "reason": null,
+        "coverage": "no_violation_found",
+        "assertion_id": "PR14.selected_fixture"
+      },
+      {
+        "id": "PR15",
+        "verdict": "pass",
+        "reason": null,
+        "coverage": "selected_fixture",
+        "assertion_id": "PR15.selected_fixture"
+      },
+      {
+        "id": "PR16",
+        "verdict": "pass",
+        "reason": null,
+        "coverage": "selected_fixture",
+        "assertion_id": "PR16.selected_fixture"
+      },
+      {
+        "id": "PR17",
+        "verdict": "pass",
+        "reason": null,
+        "coverage": "selected_fixture",
+        "assertion_id": "PR17.selected_fixture"
+      },
+      {
+        "id": "PR18",
+        "verdict": "pass",
+        "reason": null,
+        "coverage": "selected_fixture",
+        "assertion_id": "PR18.selected_fixture"
+      },
+      {
+        "id": "PR19",
+        "verdict": "fail",
+        "reason": "report_feb H: expected amount 496.80, percent 9; rows [{'amount': 0, 'percent': 0, 'seniority': 2, 'employee': 'BENCH_H'}]; report_feb G: expected amount 648.00, percent 16; rows [{'amount': 0, 'percent': 0, 'seniority': 5, 'employee': 'BENCH_G'}]; report_feb K: expected amount 161.00, percent 4; rows [{'amount': 0, 'percent': 0, 'seniority': 0, 'employee': 'BENCH_K'}]",
+        "coverage": "selected_fixture",
+        "assertion_id": "PR19.selected_fixture"
+      },
+      {
+        "id": "F01",
+        "verdict": "fail",
+        "reason": "main form: field Объект.Менеджер is no_form",
+        "coverage": "selected_fixture",
+        "assertion_id": "F01.selected_fixture"
+      },
+      {
+        "id": "F02",
+        "verdict": "pass",
+        "reason": null,
+        "coverage": "selected_fixture",
+        "assertion_id": "F02.selected_fixture"
+      },
+      {
+        "id": "F03",
+        "verdict": "pass",
+        "reason": null,
+        "coverage": "selected_fixture",
+        "assertion_id": "F03.selected_fixture"
+      },
+      {
+        "id": "F04",
+        "verdict": "fail",
+        "reason": "form K1 shows [], expected ['BENCH_Валюта', 'BENCH_Срок']; form K2 shows [], expected ['BENCH_Регион']",
+        "coverage": "selected_fixture",
+        "assertion_id": "F04.selected_fixture"
+      },
+      {
+        "id": "F05",
+        "verdict": "inconclusive",
+        "reason": "Required observations unavailable: required form fields were not confirmed as entered",
+        "coverage": "selected_fixture",
+        "assertion_id": "F05.selected_fixture"
+      },
+      {
+        "id": "G01",
+        "verdict": "pass",
+        "reason": null,
+        "coverage": "static_sources",
+        "assertion_id": "G01.static_sources"
+      },
+      {
+        "id": "G02",
+        "verdict": "pass",
+        "reason": null,
+        "coverage": "static_sources",
+        "assertion_id": "G02.static_sources"
+      },
+      {
+        "id": "G03",
+        "verdict": "pass",
+        "reason": null,
+        "coverage": "static_sources",
+        "assertion_id": "G03.static_sources"
+      }
+    ],
+    "charges": [
+      {
+        "id": "F1C-GEN03",
+        "points": "0.5",
+        "reason": "отчёт не соответствует заданию: OU20"
+      },
+      {
+        "id": "F1C-GEN01",
+        "points": "0.5",
+        "reason": "не выполнено требование: PR11 — pr_trip E4/B trip: 379.98, expected 421.13 (one rate for the trip) or 469.95 (own rate in each month)"
+      },
+      {
+        "id": "F1C-GEN01",
+        "points": "0.5",
+        "reason": "не выполнено требование: PR13 — pr_backdate E4/B tariff 2025-01: 2160, expected 1680.00; pr_backdate E4/B tariff 2025-02: 1920, expected 1680.00; trip entered back-dated: 463.06, entered in order: 379.98"
+      },
+      {
+        "id": "F1C-GEN03",
+        "points": "0.5",
+        "reason": "отчёт не соответствует заданию: PR19 — report_feb H: expected amount 496.80, percent 9; rows [{'amount': 0, 'percent': 0, 'seniority': 2, 'employee': 'BENCH_H'}]; report_feb G: expected amount 648.00, percent 16; rows [{'amount': 0, 'percent': 0, 'seniority': 5, 'employee': 'BENCH_G'}]; report_feb K: expected amount 161.00, percent 4; rows [{'amount': 0, 'percent': 0, 'seniority': 0, 'employee': 'BENCH_K'}]"
+      },
+      {
+        "id": "F1C-GEN01",
+        "points": "0.5",
+        "reason": "не выполнено требование: F01 — main form: field Объект.Менеджер is no_form"
+      },
+      {
+        "id": "F1C-GEN01",
+        "points": "0.5",
+        "reason": "не выполнено требование: F04 — form K1 shows [], expected ['BENCH_Валюта', 'BENCH_Срок']; form K2 shows [], expected ['BENCH_Регион']"
+      },
+      {
+        "id": "F1C-GEN15",
+        "points": "0.5",
+        "reason": "Reports/ВедомостьПоПодразделению/Ext/ManagerModule.bsl:3 — РегистрНакопления.ОстаткиНоменклатуры.ОстаткиИОбороты: отбор по Подразделение, индексы таблицы начинаются с Номенклатура"
+      },
+      {
+        "id": "F1C-GEN10",
+        "points": "0.5",
+        "reason": "документы упорядочены по Дата, а не по МоментВремени: порядок документов одной даты не определён: Documents/РасходнаяНакладная/Ext/ObjectModule.bsl:96 Партии.Партия.Дата; Documents/Сборка/Ext/ObjectModule.bsl:59 Партии.Партия.Дата"
+      },
+      {
+        "id": "F1C-GEN20",
+        "points": "2.0",
+        "reason": "данные базы читаются в цикле по записям: Documents/РасходнаяНакладная/Ext/ObjectModule.bsl:49; Documents/РасходнаяНакладная/Ext/ObjectModule.bsl:62; Documents/РасходнаяНакладная/Ext/ObjectModule.bsl:62 и ещё 3"
+      },
+      {
+        "id": "F1C-PR06",
+        "points": "2.0",
+        "reason": "данные графика читаются из таблицы регистра сведений: Documents/НачислениеЗарплаты/Ext/ObjectModule.bsl:32"
+      },
+      {
+        "id": "F1C-PR08",
+        "points": "2.0",
+        "reason": "база берётся из основной таблицы регистра расчёта, БазаНачисления нигде не используется: Documents/НачислениеЗарплаты/Ext/ObjectModule.bsl:49; Documents/НачислениеЗарплаты/Ext/ObjectModule.bsl:74; Documents/НачислениеЗарплаты/Ext/ObjectModule.bsl:84"
+      },
+      {
+        "id": "F1C-GEN28",
+        "points": "1.0",
+        "reason": "оперативное проведение разрешено у документов с движениями по регистрам расчёта: НачислениеЗарплаты"
+      },
+      {
+        "id": "F1C-GEN01",
+        "points": "0.5",
+        "reason": "расчёт только в модулях объектов: Documents/НачислениеЗарплаты/Ext/ObjectModule.bsl"
+      },
+      {
+        "id": "F1C-GEN01",
+        "points": "0.5",
+        "reason": "разыменование поля составного типа без ВЫРАЗИТЬ: Documents/РасходнаяНакладная/Ext/ObjectModule.bsl: Партии.Партия.Дата; Documents/Сборка/Ext/ObjectModule.bsl: Партии.Партия.Дата"
+      }
+    ],
+    "score_upper_bound": "-7.0",
+    "score": null,
+    "grade": "unsatisfactory",
+    "deductions": "12.0",
+    "not_assessed": 17,
+    "gates": {
+      "starter_origin": "passed",
+      "load": "loaded",
+      "clients": "compiles",
+      "demo_data": "present"
+    },
+    "infrastructure_errors": false,
+    "comparison_eligible": false,
+    "binding_compatibility": null
+  },
+  "source_findings": [
+    {
+      "penalty_id": "F1C-GEN03",
+      "defect_id": "requirement.OU20",
+      "reason": "отчёт не соответствует заданию: OU20",
+      "evidence": [],
+      "proof_kind": "requirement_verdict"
+    },
+    {
+      "penalty_id": "F1C-GEN01",
+      "defect_id": "requirement.PR11",
+      "reason": "не выполнено требование: PR11 — pr_trip E4/B trip: 379.98, expected 421.13 (one rate for the trip) or 469.95 (own rate in each month)",
+      "evidence": [],
+      "proof_kind": "requirement_verdict"
+    },
+    {
+      "penalty_id": "F1C-GEN01",
+      "defect_id": "requirement.PR13",
+      "reason": "не выполнено требование: PR13 — pr_backdate E4/B tariff 2025-01: 2160, expected 1680.00; pr_backdate E4/B tariff 2025-02: 1920, expected 1680.00; trip entered back-dated: 463.06, entered in order: 379.98",
+      "evidence": [],
+      "proof_kind": "requirement_verdict"
+    },
+    {
+      "penalty_id": "F1C-PR15",
+      "defect_id": "requirement.PR13",
+      "reason": "не выполнено требование: PR13 — pr_backdate E4/B tariff 2025-01: 2160, expected 1680.00; pr_backdate E4/B tariff 2025-02: 1920, expected 1680.00; trip entered back-dated: 463.06, entered in order: 379.98",
+      "evidence": [],
+      "proof_kind": "requirement_verdict"
+    },
+    {
+      "penalty_id": "F1C-GEN18",
+      "defect_id": "requirement.PR13",
+      "reason": "не выполнено требование: PR13 — pr_backdate E4/B tariff 2025-01: 2160, expected 1680.00; pr_backdate E4/B tariff 2025-02: 1920, expected 1680.00; trip entered back-dated: 463.06, entered in order: 379.98",
+      "evidence": [],
+      "proof_kind": "requirement_verdict"
+    },
+    {
+      "penalty_id": "F1C-GEN03",
+      "defect_id": "requirement.PR19",
+      "reason": "отчёт не соответствует заданию: PR19 — report_feb H: expected amount 496.80, percent 9; rows [{'amount': 0, 'percent': 0, 'seniority': 2, 'employee': 'BENCH_H'}]; report_feb G: expected amount 648.00, percent 16; rows [{'amount': 0, 'percent': 0, 'seniority': 5, 'employee': 'BENCH_G'}]; report_feb K: expected amount 161.00, percent 4; rows [{'amount': 0, 'percent': 0, 'seniority': 0, 'employee': 'BENCH_K'}]",
+      "evidence": [],
+      "proof_kind": "requirement_verdict"
+    },
+    {
+      "penalty_id": "F1C-GEN01",
+      "defect_id": "requirement.F01",
+      "reason": "не выполнено требование: F01 — main form: field Объект.Менеджер is no_form",
+      "evidence": [],
+      "proof_kind": "requirement_verdict"
+    },
+    {
+      "penalty_id": "F1C-GEN01",
+      "defect_id": "requirement.F04",
+      "reason": "не выполнено требование: F04 — form K1 shows [], expected ['BENCH_Валюта', 'BENCH_Срок']; form K2 shows [], expected ['BENCH_Регион']",
+      "evidence": [],
+      "proof_kind": "requirement_verdict"
+    },
+    {
+      "penalty_id": "F1C-GEN15",
+      "defect_id": "query.Reports/ВедомостьПоПодразделению/Ext/ManagerModule.bsl:3.РегистрНакопления.ОстаткиНоменклатуры.ОстаткиИОбороты",
+      "reason": "Reports/ВедомостьПоПодразделению/Ext/ManagerModule.bsl:3 — РегистрНакопления.ОстаткиНоменклатуры.ОстаткиИОбороты: отбор по Подразделение, индексы таблицы начинаются с Номенклатура",
+      "evidence": [
+        {
+          "file": "Reports/ВедомостьПоПодразделению/Ext/ManagerModule.bsl",
+          "line": 3,
+          "text": "РегистрНакопления.ОстаткиНоменклатуры.ОстаткиИОбороты: отбор по Подразделение, индексы таблицы начинаются с Номенклатура"
+        }
+      ],
+      "proof_kind": "query_schema"
+    },
+    {
+      "penalty_id": "F1C-GEN10",
+      "defect_id": "code.order_by_date",
+      "reason": "документы упорядочены по Дата, а не по МоментВремени: порядок документов одной даты не определён: Documents/РасходнаяНакладная/Ext/ObjectModule.bsl:96 Партии.Партия.Дата; Documents/Сборка/Ext/ObjectModule.bsl:59 Партии.Партия.Дата",
+      "evidence": [],
+      "proof_kind": "code_sign"
+    },
+    {
+      "penalty_id": "F1C-GEN20",
+      "defect_id": "code.loop_reads",
+      "reason": "данные базы читаются в цикле по записям: Documents/РасходнаяНакладная/Ext/ObjectModule.bsl:49; Documents/РасходнаяНакладная/Ext/ObjectModule.bsl:62; Documents/РасходнаяНакладная/Ext/ObjectModule.bsl:62 и ещё 3",
+      "evidence": [
+        {
+          "file": "Documents/РасходнаяНакладная/Ext/ObjectModule.bsl",
+          "line": 49,
+          "text": "Выборка = Запрос.Выполнить().Выбрать(); ВсегоКоличество = 0; ВсегоСтоимость = 0; НаСкладе = 0;"
+        },
+        {
+          "file": "Documents/РасходнаяНакладная/Ext/ObjectModule.bsl",
+          "line": 62,
+          "text": "Если Осталось > 0 Тогда Отказ = Истина; Сообщить(\"Недостаточно товара и аналогов: \" + Строка.Номенклатура); КонецЕсли;"
+        },
+        {
+          "file": "Documents/РасходнаяНакладная/Ext/ObjectModule.bsl",
+          "line": 62,
+          "text": "Если Осталось > 0 Тогда Отказ = Истина; Сообщить(\"Недостаточно товара и аналогов: \" + Строка.Номенклатура); КонецЕсли;"
+        },
+        {
+          "file": "Documents/Сборка/Ext/ObjectModule.bsl",
+          "line": 9,
+          "text": "Выборка = Запрос.Выполнить().Выбрать(); СтоимостьБлока = 0; НайденаСпецификация = Ложь;"
+        },
+        {
+          "file": "Documents/Сборка/Ext/ObjectModule.bsl",
+          "line": 15,
+          "text": "Если Не НайденаСпецификация Тогда Отказ = Истина; Сообщить(\"Нет спецификации \" + Блок.Номенклатура); КонецЕсли;"
+        },
+        {
+          "file": "Documents/Сборка/Ext/ObjectModule.bsl",
+          "line": 15,
+          "text": "Если Не НайденаСпецификация Тогда Отказ = Истина; Сообщить(\"Нет спецификации \" + Блок.Номенклатура); КонецЕсли;"
+        }
+      ],
+      "proof_kind": "code_sign"
+    },
+    {
+      "penalty_id": "F1C-PR06",
+      "defect_id": "pr.schedule_table",
+      "reason": "данные графика читаются из таблицы регистра сведений: Documents/НачислениеЗарплаты/Ext/ObjectModule.bsl:32",
+      "evidence": [
+        {
+          "file": "Documents/НачислениеЗарплаты/Ext/ObjectModule.bsl",
+          "line": 32,
+          "text": "запрос к РегистрСведений.ГрафикиРаботы"
+        }
+      ],
+      "proof_kind": "code_sign"
+    },
+    {
+      "penalty_id": "F1C-PR08",
+      "defect_id": "pr.base_main_table",
+      "reason": "база берётся из основной таблицы регистра расчёта, БазаНачисления нигде не используется: Documents/НачислениеЗарплаты/Ext/ObjectModule.bsl:49; Documents/НачислениеЗарплаты/Ext/ObjectModule.bsl:74; Documents/НачислениеЗарплаты/Ext/ObjectModule.bsl:84",
+      "evidence": [
+        {
+          "file": "Documents/НачислениеЗарплаты/Ext/ObjectModule.bsl",
+          "line": 49,
+          "text": "запрос к основной таблице РегистрРасчета.Начисления"
+        },
+        {
+          "file": "Documents/НачислениеЗарплаты/Ext/ObjectModule.bsl",
+          "line": 74,
+          "text": "запрос к основной таблице РегистрРасчета.Начисления"
+        },
+        {
+          "file": "Documents/НачислениеЗарплаты/Ext/ObjectModule.bsl",
+          "line": 84,
+          "text": "запрос к основной таблице РегистрРасчета.Начисления"
+        }
+      ],
+      "proof_kind": "code_sign"
+    },
+    {
+      "penalty_id": "F1C-GEN28",
+      "defect_id": "practice.EXM01",
+      "reason": "оперативное проведение разрешено у документов с движениями по регистрам расчёта: НачислениеЗарплаты",
+      "evidence": [],
+      "proof_kind": "code_sign"
+    },
+    {
+      "penalty_id": "F1C-GEN01",
+      "defect_id": "practice.EXM05",
+      "reason": "расчёт только в модулях объектов: Documents/НачислениеЗарплаты/Ext/ObjectModule.bsl",
+      "evidence": [],
+      "proof_kind": "code_sign"
+    },
+    {
+      "penalty_id": "F1C-GEN01",
+      "defect_id": "practice.CHS03",
+      "reason": "разыменование поля составного типа без ВЫРАЗИТЬ: Documents/РасходнаяНакладная/Ext/ObjectModule.bsl: Партии.Партия.Дата; Documents/Сборка/Ext/ObjectModule.bsl: Партии.Партия.Дата",
+      "evidence": [],
+      "proof_kind": "code_sign"
+    }
+  ]
+}
