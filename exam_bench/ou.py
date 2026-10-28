@@ -212,6 +212,15 @@ def register_write(ref, period, values):
     return s
 
 
+def specification_write(ref, period, values):
+    """Append a specification without constraining a handler's period normalization."""
+    name = ref.split('.', 1)[1]
+    s = f'Набор = РегистрыСведений.{name}.СоздатьНаборЗаписей(); СтрЗаписи = Набор.Добавить();\n'
+    s += f'Если Метаданные.РегистрыСведений.{name}.ПериодичностьРегистраСведений <> Метаданные.СвойстваОбъектов.ПериодичностьРегистраСведений.Непериодический Тогда СтрЗаписи.Период = {period}; КонецЕсли;\n'
+    s += ''.join(f'СтрЗаписи.{k} = {v}; ' for k, v in values) + 'Набор.Записать(Ложь);\n'
+    return s
+
+
 def document_code(var, ref, when, header, rows_by_table, sets):
     s = f'{var} = {manager(ref)}.СоздатьДокумент(); {var}.Дата = {when};\n'
     for attr, value in header:
@@ -272,7 +281,7 @@ def step_code(step, ou, obj, f):
         values = [(sf['block'], f'Товары[{q(block)}]'), (sf['item'], f'Товары[{q(item)}]'), (sf['quantity'], str(qty))]
         if sf.get('property'):
             values.append((sf['property'], f'Свойства[{q(prop)}]'))
-        return register_write(obj['specification'], date(when), values)
+        return specification_write(obj['specification'], date(when), values)
     if kind == 'spec_read':
         _, label, when, block = step
         sf = f['specification']
