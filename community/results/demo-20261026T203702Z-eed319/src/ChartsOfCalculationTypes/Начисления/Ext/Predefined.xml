@@ -1,0 +1,21 @@
+﻿<?xml version="1.0" encoding="UTF-8"?>
+<PredefinedData xmlns="http://v8.1c.ru/8.3/xcf/predef" xmlns:v8="http://v8.1c.ru/8.1/data/core" xmlns:xr="http://v8.1c.ru/8.3/xcf/readable" xmlns:xs="http://www.w3.org/2001/XMLSchema" xmlns:xsi="http://www.w3.org/2001/XMLSchema-instance" xsi:type="CalculationTypePredefinedItems" version="2.20">
+	<Item id="1c7f7fed-36b3-4fde-8e56-417777f29640">
+		<Name>Командировка</Name>
+		<Code>3</Code>
+		<Description>Командировка</Description>
+		<ActionPeriodIsBase>false</ActionPeriodIsBase>
+	</Item>
+	<Item id="cb170006-8f40-4610-bf30-014391522c30">
+		<Name>Премия</Name>
+		<Code>2</Code>
+		<Description>Премия</Description>
+		<ActionPeriodIsBase>false</ActionPeriodIsBase>
+	</Item>
+	<Item id="982de65f-0a16-4bdc-ad42-c62eb68c20a2">
+		<Name>Тариф</Name>
+		<Code>1</Code>
+		<Description>Тариф</Description>
+		<ActionPeriodIsBase>false</ActionPeriodIsBase>
+	</Item>
+</PredefinedData>
