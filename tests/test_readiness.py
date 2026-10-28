@@ -74,6 +74,8 @@ class Readiness(unittest.TestCase):
 
     def test_models_are_offered_per_agent_from_the_shipped_list(self):
         self.assertTrue(readiness.model_allowed('codex', readiness.agents()['codex']['default_model']))
+        self.assertIn({'id': 'gpt-6.1-terra', 'label': 'GPT-6.1 Terra'}, readiness.agents()['codex']['models'])
+        self.assertTrue(readiness.model_allowed('codex', 'gpt-6.1-terra'))
         self.assertTrue(readiness.model_allowed('claude', 'claude-opus-5-5'))
         self.assertFalse(readiness.model_allowed('codex', 'claude-opus-5-5'))
         self.assertFalse(readiness.model_allowed('codex', '--dangerously-bypass'))
