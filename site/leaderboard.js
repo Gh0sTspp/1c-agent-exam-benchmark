@@ -20,7 +20,7 @@ const arch = a => ({amd64: 'x64', x86_64: 'x64', arm64: 'arm64', aarch64: 'arm64
 const isolation = {'dedicated-host': 'без песочницы', macos: 'песочница macOS', bubblewrap: 'песочница Linux'};
 let rows = [], sort = {key: 'penalties', dir: 1}, local = null, submit = null;
 
-function fromCommunity(r) {
+export function fromCommunity(r) {
   const v = r.result, c = r.conditions || {}, m = r.measurement || {};
   return {id: r.id, local: false, model: v.model, agent: c.client || (String(v.model).startsWith('claude') ? 'claude' : 'codex'),
     agentVersion: c.client_version, effort: c.reasoning_effort, harness: v.harness, e: v, limit: c.solve_timeout_seconds,
@@ -29,7 +29,7 @@ function fromCommunity(r) {
     runId: r.run_id || v.run_id || r.id, history: (r.previous_evaluations || []).map(fromCommunity)};
 }
 
-function fromLocal(item) {
+export function fromLocal(item) {
   const e = item.evaluation, run = item.run || {}, m = item.measurement || {};
   return {id: item.job_id, local: true, item, model: run.model || e.model, agent: run.client || 'codex', agentVersion: run.client_version,
     effort: run.reasoning_effort, harness: item.harness, e, limit: run.solve_timeout_seconds, tokens: run.tokens || {},
@@ -73,8 +73,43 @@ export function penaltyLabel(e) {
   return `штрафные баллы: ${number(n)}${partial ? ' · проверка неполная' : ''}`;
 }
 
-function filtersMatch(r) {
-  return ['agent', 'model', 'harness'].every(k => !$('f-' + k).value || String(r[k]) === $('f-' + k).value);
+// The solve limit is distinct from actual execution time. Unknown is selectable, not zero.
+export function limitKey(limit) {
+  if (typeof limit === 'string' && !/^\d+$/.test(limit)) return 'unknown';
+  if (typeof limit !== 'string' && typeof limit !== 'number') return 'unknown';
+  const seconds = Number(limit);
+  return Number.isSafeInteger(seconds) && seconds > 0 ? String(seconds) : 'unknown';
+}
+
+export function limitLabel(limit) {
+  const key = limitKey(limit);
+  if (key === 'unknown') return 'Не указан';
+  const seconds = Number(key), minutes = Math.floor(seconds / 60), remainder = seconds % 60;
+  return minutes ? `${minutes} мин${remainder ? ` ${remainder} сек` : ''}` : `${seconds} сек`;
+}
+
+export function limitOptions(values) {
+  const keys = new Set(values.map(limitKey));
+  const numeric = [...keys].filter(k => k !== 'unknown').sort((a, b) => Number(a) - Number(b));
+  if (keys.has('unknown')) numeric.push('unknown');
+  return numeric.map(value => ({value, label: limitLabel(value)}));
+}
+
+export function matchesLimit(limit, selection) {
+  return !selection || limitKey(limit) === selection;
+}
+
+export function filtersMatch(r) {
+  return ['agent', 'model', 'harness'].every(k => !$('f-' + k).value || String(r[k]) === $('f-' + k).value)
+    && matchesLimit(r.limit, $('f-limit').value);
+}
+
+export function fillLimitFilter(values) {
+  const select = $('f-limit'), current = select.value;
+  const all = node('option', 'Все'); all.value = '';
+  const options = limitOptions(values).map(({value, label}) => { const o = node('option', label); o.value = value; return o; });
+  select.replaceChildren(all, ...options);
+  if ([...select.options].some(o => o.value === current)) select.value = current;
 }
 
 function fillFilter(id, values, label) {
@@ -308,7 +343,7 @@ function render() {
     const who = node('td'); who.append(node('b', r.model));
     sub(who, [agents[r.agent] || r.agent, r.agentVersion, r.effort].filter(Boolean).join(' · '));
     sub(who, harnessName(r.harness));
-    const time = node('td', minutes(r.e.solve_seconds), 'num'); sub(time, r.limit ? `лимит ${Math.round(r.limit / 60)} мин` : '');
+    const time = node('td', minutes(r.e.solve_seconds), 'num'); sub(time, limitKey(r.limit) === 'unknown' ? 'лимит не указан' : `лимит ${limitLabel(r.limit)}`);
     const estimate = estimateApiCost(r.model, r.tokens);
     const tok = node('td', null, 'num cost-cell');
     tok.append(node('b', estimate == null ? 'Нет расчёта' : `≈ $${number(estimate.toFixed(2))}`, 'cost-value'));
@@ -359,10 +394,11 @@ async function load() {
   fillFilter('f-agent', rows.map(r => r.agent), v => agents[v] || v);
   fillFilter('f-model', rows.map(r => r.model), v => v);
   fillFilter('f-harness', rows.map(r => r.harness), harnessName);
+  fillLimitFilter(rows.map(r => r.limit));
   render();
 }
 
-for (const id of ['f-agent', 'f-model', 'f-harness']) $(id).addEventListener('change', render);
+for (const id of ['f-agent', 'f-model', 'f-harness', 'f-limit']) $(id).addEventListener('change', render);
 $('mobile-sort').addEventListener('change', () => {
   const key = $('mobile-sort').value;
   sort = {key, dir: key === 'solve' || key === 'tokens' || key === 'penalties' ? 1 : -1};
