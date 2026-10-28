@@ -73,11 +73,14 @@ def calibrate(starter_source,starter_dt,binary,root,fail_fast=False):
     query_calibration=calibrate_query(starter_source,starter_dt,binary,root/'query-parameter')
     from .calibration_periodicity import run as calibrate_periodicity
     periodicity_calibration=calibrate_periodicity(starter_source,starter_dt,binary,root/'periodicity')
-    accepted=all(p['passed'] and p['same_observations_as_prior'] for p in positives) and all(n['target_verdict']=='fail' and n['runtime_observations_available'] and not n['syntax_or_adapter_errors'] for n in negatives) and leak_check and query_calibration['passed'] and periodicity_calibration['passed']
+    from .calibration_characteristics import run as calibrate_characteristics
+    characteristics_calibration=calibrate_characteristics(starter_source,starter_dt,binary,root/'characteristics')
+    accepted=all(p['passed'] and p['same_observations_as_prior'] for p in positives) and all(n['target_verdict']=='fail' and n['runtime_observations_available'] and not n['syntax_or_adapter_errors'] for n in negatives) and leak_check and query_calibration['passed'] and periodicity_calibration['passed'] and characteristics_calibration['passed']
     if implementation!=grading_fingerprint():raise ValueError('Grading implementation changed during calibration')
     summary={'schema_version':1,'profile_id':PROFILE['id'],'grader_sha256':digest(Path(__file__).parent/'grader.py'),'calibration_generator_sha256':digest(Path(__file__).parent/'calibration.py'),'accepted':accepted,'positives':positives,'negatives':negatives,'unposted_movement_leak_oracle_check':leak_check,'limitations':['partial_refusal native mutant posts incomplete expense instead of refusing; an actual leak after refusal is checked on controlled observation data because native posting transaction rolls writes back','BU02 reports and other readers are not checked','ledger item/warehouse as physical dimensions (variants one, two) or predefined subconto kinds (variant sub); analogs as an information register pair or a tabular section of the items catalog (variant tab); indexed СубконтоДтN bindings and other analog storage modes not supported yet','OU04, OU05, OU07, OU09 have no dedicated mutant: they are checked by positives only','PR14: metadata and code signs alone do not prove runtime use (A08); the old unreachable recalculation_sign mutant is excluded, operative-path detection remains uncalibrated'],'models_probed':[],'model_probe_ref':None}
     summary.update(fingerprint_version=2,runtime_implementation_files=runtime_fingerprint(),implementation_files=implementation,readonly_sources_verified=True,machine=machine_identity())
     summary['query_parameter_calibration']=query_calibration
     summary['periodicity_calibration']=periodicity_calibration
+    summary['characteristics_calibration']=characteristics_calibration
     write_json(root/'summary.json',summary)
     return summary

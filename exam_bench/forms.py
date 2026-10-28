@@ -8,7 +8,7 @@ form without opening it, records its visible fields, fills the additional fields
 import re
 from pathlib import Path
 
-from .ou import IDENT, manager, q, characteristic_code
+from .ou import IDENT, manager, q
 
 OBJECTS = {'counterparties': 'Catalog', 'managers': 'Catalog', 'characteristics': 'ChartOfCharacteristicTypes'}
 KINDS = {'C1': 'Валюта', 'C2': 'Срок', 'C3': 'Регион'}
@@ -77,6 +77,7 @@ def code(binding, case, helpers):
     table, attr = f['managers']['list'].split('.')
     s = 'Функция Run() Экспорт\nАвтозаполнено = Новый Массив; Виды = Новый Соответствие; Менеджеры = Новый Соответствие;\n'
     s += 'Снимки = Новый Структура; Ошибки = Новый Структура;\n'
+    s += 'Если Не ВводСтрокПоддерживается() Тогда Возврат Новый Структура("fixture_error", "Контрольные строки USD и 15 не поддерживаются типом характеристики или поля хранения"); КонецЕсли;\n'
     for key in KINDS:
         s += f'Виды.Вставить({q(key)}, НовыйВидХарактеристики({q(name(key))}, Автозаполнено));\n'
     for m, kinds in LISTS.items():
@@ -98,7 +99,44 @@ def code(binding, case, helpers):
 КонецФункции
 '''
     s += stored_code(forms)
-    return s + characteristic_code(obj['characteristics']) + helpers
+    return s + forms_characteristic_code(forms) + helpers
+
+
+def forms_characteristic_code(forms):
+    """Create kinds compatible with the literal values typed by the form observer."""
+    chart = forms['objects']['characteristics'].split('.', 1)[1]
+    values = forms['values']
+    if values['kind'] == 'table':
+        catalog = forms['objects']['counterparties'].split('.', 1)[1]
+        table, field = values['value'].split('.')
+        field_code = (f'ТЧ = Метаданные.Справочники.{catalog}.ТабличныеЧасти.Найти({q(table)});\n'
+                      f' Если ТЧ = Неопределено Тогда Возврат Ложь; КонецЕсли;\n'
+                      f' ПолеМД = ТЧ.Реквизиты.Найти({q(field)});')
+    else:
+        register = values['register'].split('.', 1)[1]
+        field = q(values['value'])
+        field_code = (f'РегистрМД = Метаданные.РегистрыСведений.{register};\n'
+                      f' ПолеМД = РегистрМД.Ресурсы.Найти({field});\n'
+                      f' Если ПолеМД = Неопределено Тогда ПолеМД = РегистрМД.Измерения.Найти({field}); КонецЕсли;\n'
+                      f' Если ПолеМД = Неопределено Тогда ПолеМД = РегистрМД.Реквизиты.Найти({field}); КонецЕсли;')
+    return f'''Функция ВводСтрокПоддерживается()
+ МД = Метаданные.ПланыВидовХарактеристик.{chart};
+ {field_code}
+ Если ПолеМД = Неопределено Тогда Возврат Ложь; КонецЕсли;
+ Если Не МД.Тип.СодержитТип(Тип("Строка")) Или Не ПолеМД.Тип.СодержитТип(Тип("Строка")) Тогда Возврат Ложь; КонецЕсли;
+ Для Каждого Образец Из СтрРазделить("USD,15", ",") Цикл
+  Если МД.Тип.ПривестиЗначение(Образец) <> Образец Или ПолеМД.Тип.ПривестиЗначение(Образец) <> Образец Тогда Возврат Ложь; КонецЕсли;
+ КонецЦикла;
+ Возврат Истина;
+КонецФункции
+Функция НовыйВидХарактеристики(Наименование, Автозаполнено)
+ МД = Метаданные.ПланыВидовХарактеристик.{chart};
+ Х = ПланыВидовХарактеристик.{chart}.СоздатьЭлемент(); Х.Наименование = Наименование;
+ Х.ТипЗначения = Новый ОписаниеТипов("Строка", , МД.Тип.КвалификаторыСтроки);
+ ЗаполнитьОбязательные(Х, Неопределено, Неопределено, Автозаполнено); Х.Записать();
+ Возврат Х.Ссылка;
+КонецФункции
+'''
 
 
 def stored_code(forms):
@@ -126,6 +164,7 @@ def client_code(binding):
     forms = binding['forms']
     form = form_name(forms)
     s = f'''Процедура ClientRun(Результат)
+ Если Результат.Свойство("fixture_error") Тогда Возврат; КонецЕсли;
  Формы = Новый Структура;
  Для Каждого Имя Из СтрРазделить("{",".join(COUNTERPARTIES)}", ",") Цикл
   Попытка
@@ -222,7 +261,10 @@ def compare(observations, binding, static=None):
     why = []
 
     def obs():
-        return observations['forms']
+        result = observations['forms']
+        if result.get('fixture_error'):
+            raise ValueError('form fixture unavailable: ' + str(result['fixture_error'])[:150])
+        return result
 
     def fields(key):
         o = obs()
@@ -276,8 +318,12 @@ def compare(observations, binding, static=None):
     def saved():
         got = obs()['forms'].get('saved') or {}
         if 'error' in got:
-            why.append('writing the form failed: ' + str(got['error'])[:200])
-            return False
+            raise ValueError('form input or write was not confirmed: ' + str(got['error'])[:150])
+        typed = got.get('typed')
+        if not isinstance(typed, list) or not set(TYPED).issubset(typed):
+            raise ValueError('required form fields were not confirmed as entered')
+        if got.get('written') is not True:
+            raise ValueError('form write was not confirmed')
         stored = {(r['kind'], r['value']) for r in got['stored']}
         expected = {(name(k), v) for k, v in TYPED.items()}
         if not expected <= stored:

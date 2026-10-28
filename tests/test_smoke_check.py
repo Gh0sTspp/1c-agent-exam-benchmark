@@ -22,12 +22,13 @@ def grading(good_rules, caught=True, errors=None):
 
 
 class SmokeCheck(unittest.TestCase):
-    def run_check(self, grade, query_passed=True, periodicity_passed=True):
+    def run_check(self, grade, query_passed=True, periodicity_passed=True, characteristics_passed=True):
         with tempfile.TemporaryDirectory() as td, \
              patch.object(smoke, 'generate', side_effect=fake_generate), patch.object(smoke, 'grade', side_effect=grade) as g, \
              patch('exam_bench.runtime.require_execution_mode'), \
              patch('exam_bench.calibration_query.run', return_value={'passed': query_passed}), \
              patch('exam_bench.calibration_periodicity.run', return_value={'passed': periodicity_passed}), \
+             patch('exam_bench.calibration_characteristics.run', return_value={'passed': characteristics_passed}), \
              patch('exam_bench.runtime.platform_binary', return_value=str(Path('/bin/sh').resolve())), \
              patch('exam_bench.runtime.machine_identity', return_value={'os': 'TestOS'}):
             return smoke.smoke_check(Path(td), Path(td) / 'dt', '/bin/sh', Path(td) / 'smoke'), g
@@ -58,6 +59,11 @@ class SmokeCheck(unittest.TestCase):
         summary, _ = self.run_check(grading([{'id': 'BU13', 'verdict': 'pass'}]), periodicity_passed=False)
         self.assertFalse(summary['accepted'])
         self.assertEqual(summary['reason'], 'periodicity calibration failed')
+
+    def test_failed_characteristics_calibration_is_reported(self):
+        summary, _ = self.run_check(grading([{'id': 'BU13', 'verdict': 'pass'}]), characteristics_passed=False)
+        self.assertFalse(summary['accepted'])
+        self.assertEqual(summary['reason'], 'characteristics calibration failed')
 
 
 if __name__ == '__main__':

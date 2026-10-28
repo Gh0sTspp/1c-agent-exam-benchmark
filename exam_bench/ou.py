@@ -173,8 +173,8 @@ def code(binding, case, helpers):
     from .grader import report_code
     for role, report in reports.items():
         s += report_code(report, 'Report_' + role, department=role == 'ou_statement')
-    if 'characteristics' in obj:
-        s += characteristic_code(obj['characteristics'])
+    if 'characteristics' in obj and 'property_values' in obj:
+        s += ou_characteristic_code(obj['characteristics'], obj['property_values'], f['property_values']['value'])
     s += snapshot_code(obj, f) + helpers
     return s
 
@@ -197,6 +197,60 @@ def characteristic_code(ref):
  МД = Метаданные.ПланыВидовХарактеристик.{name}.ДополнительныеЗначенияХарактеристик;
  Если МД = Неопределено Тогда Возврат Текст; КонецЕсли;
  Эл = Справочники[МД.Имя].СоздатьЭлемент(); Эл.Владелец = Вид; Эл.Наименование = Текст;
+ ЗаполнитьОбязательные(Эл, Неопределено, Неопределено, Автозаполнено); Эл.Записать();
+ Возврат Эл.Ссылка;
+КонецФункции
+'''
+
+
+
+def ou_characteristic_code(ref, values_ref, value_field):
+    """Use a type supported by both the chart and the bound register value field."""
+    name = ref.split('.', 1)[1]
+    register = values_ref.split('.', 1)[1]
+    field = q(value_field)
+    return f'''Функция НовыйВидХарактеристики(Наименование, Автозаполнено)
+ МД = Метаданные.ПланыВидовХарактеристик.{name};
+ РегистрМД = Метаданные.РегистрыСведений.{register};
+ ПолеМД = РегистрМД.Ресурсы.Найти({field});
+ Если ПолеМД = Неопределено Тогда ПолеМД = РегистрМД.Измерения.Найти({field}); КонецЕсли;
+ Если ПолеМД = Неопределено Тогда ПолеМД = РегистрМД.Реквизиты.Найти({field}); КонецЕсли;
+ Если ПолеМД = Неопределено Тогда ВызватьИсключение "Не найдено поле значения характеристики"; КонецЕсли;
+ Х = ПланыВидовХарактеристик.{name}.СоздатьЭлемент(); Х.Наименование = Наименование;
+ СтрокаПодходит = МД.Тип.СодержитТип(Тип("Строка")) И ПолеМД.Тип.СодержитТип(Тип("Строка"));
+ Если СтрокаПодходит Тогда
+  Для Каждого Образец Из СтрРазделить("Alpha,Beta", ",") Цикл
+   Если МД.Тип.ПривестиЗначение(Образец) <> Образец Или ПолеМД.Тип.ПривестиЗначение(Образец) <> Образец Тогда
+    СтрокаПодходит = Ложь;
+   КонецЕсли;
+  КонецЦикла;
+ КонецЕсли;
+ Если СтрокаПодходит Тогда
+  Х.ТипЗначения = Новый ОписаниеТипов("Строка", , МД.Тип.КвалификаторыСтроки);
+ ИначеЕсли МД.ДополнительныеЗначенияХарактеристик <> Неопределено Тогда
+  ТипСсылки = Тип("СправочникСсылка." + МД.ДополнительныеЗначенияХарактеристик.Имя);
+  Если Не МД.Тип.СодержитТип(ТипСсылки) Или Не ПолеМД.Тип.СодержитТип(ТипСсылки) Тогда
+   ВызватьИсключение "Нет поддерживаемого типа значения характеристики";
+  КонецЕсли;
+  Х.ТипЗначения = Новый ОписаниеТипов("СправочникСсылка." + МД.ДополнительныеЗначенияХарактеристик.Имя);
+ Иначе
+  ВызватьИсключение "Нет поддерживаемого типа значения характеристики";
+ КонецЕсли;
+ ЗаполнитьОбязательные(Х, Неопределено, Неопределено, Автозаполнено); Х.Записать();
+ Возврат Х.Ссылка;
+КонецФункции
+Функция ЗначениеХарактеристики(Вид, Текст, Автозаполнено)
+ Если Вид.ТипЗначения.СодержитТип(Тип("Строка")) Тогда Возврат Текст; КонецЕсли;
+ МД = Метаданные.ПланыВидовХарактеристик.{name}.ДополнительныеЗначенияХарактеристик;
+ Если МД = Неопределено Тогда ВызватьИсключение "Нет справочника значений характеристики"; КонецЕсли;
+ Эл = Справочники[МД.Имя].СоздатьЭлемент();
+ Если МД.Владельцы.Количество() > 0 Тогда
+  Если Не МД.Владельцы.Содержит(Метаданные.ПланыВидовХарактеристик.{name}) Тогда
+   ВызватьИсключение "Справочник значений не подчинён виду характеристики";
+  КонецЕсли;
+  Эл.Владелец = Вид;
+ КонецЕсли;
+ Эл.Наименование = Текст; Эл.УстановитьНовыйКод();
  ЗаполнитьОбязательные(Эл, Неопределено, Неопределено, Автозаполнено); Эл.Записать();
  Возврат Эл.Ссылка;
 КонецФункции
@@ -437,9 +491,14 @@ def compare(observations, binding, static=None):
         o = binding['ou']['objects']
         if not ('characteristics' in o and 'property_values' in o):
             raise ValueError('ou.objects.characteristics and ou.objects.property_values are not declared')
-        errors = {k: v for k, v in observations['ou_report']['errors'].items() if k == 'characteristic' or k.startswith('value_')}
+        report = observations['ou_report']
+        errors = {k: v for k, v in report['errors'].items() if k in ('characteristic', 'props') or k.startswith('value_')}
         if errors:
             raise ValueError('characteristic values could not be written: ' + str(errors)[:150])
+        rows = report['snapshots']['props']
+        actual = sorted((r['property'], r['value']) for r in rows if r['characteristic'] == 'BENCH_Производитель')
+        if actual != [('BENCH_P1', 'Alpha'), ('BENCH_P2', 'Beta')]:
+            raise ValueError('characteristic fixture values differ from the intended values')
         return True
 
     statement_qty = {f'{k}_qty' for k in ('opening', 'receipt', 'expense', 'closing')} & set(((binding.get('reports') or {}).get('ou_statement') or {}).get('fields', {}))
