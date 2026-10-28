@@ -7,7 +7,7 @@ from unittest.mock import patch
 
 from exam_bench.common import digest, grading_fingerprint, tree_manifest
 from tools.community_results import export_public, read, write
-from tools.owner_verification import begin, complete, fingerprint_id, publish
+from tools.owner_verification import begin, complete, fingerprint_id, publish, public_observation_errors
 from test_community_results import fixture
 
 
@@ -30,7 +30,9 @@ class OwnerVerification(unittest.TestCase):
                   'errors': {}, 'gates': {}}
         if incomplete:
             v['outcome'] = 'incomplete'
-            record['errors'] = {'ou_assembly': {'kind': 'observation_error'}}
+            record['errors'] = {'ou_assembly': {'kind': 'observation_error', 'message':
+                'Значение поля не соответствует установленному отбору: '
+                'Регистр сведений: Спецификации; Поле: Период; C:\\Users\\private\\db'}}
         return publish(record, folder, root, allow_incomplete=incomplete)
 
     def test_revision_keeps_author_and_original_bytes_with_separate_verification(self):
@@ -98,10 +100,27 @@ class OwnerVerification(unittest.TestCase):
     def test_explicit_incomplete_recheck_remains_unranked_and_keeps_history(self):
         with tempfile.TemporaryDirectory() as td:
             root = Path(td); folder = fixture(root)
-            self.receipt(root, folder, incomplete=True)
+            path = self.receipt(root, folder, incomplete=True)
             export_public(root, root / 'dist')
             row = read(root / 'dist/community.json')['results'][0]
             self.assertEqual(row['verification'], 'repository_owner_incomplete')
             self.assertTrue(row['result']['infrastructure_errors'])
             self.assertFalse(row['result']['comparison_eligible'])
             self.assertEqual(row['previous_evaluations'][0]['verification'], 'contributor_reported')
+            errors = row['result']['observation_errors']
+            self.assertEqual(errors[0]['scenario'], 'ou_assembly')
+            self.assertIn('период записи не соответствует отбору', errors[0]['reason'])
+            self.assertNotIn('C:\\Users\\private', json.dumps(errors, ensure_ascii=False))
+            with zipfile.ZipFile(root / 'dist' / row['download']) as z:
+                receipt = json.loads(z.read('owner-recheck.json'))
+                self.assertEqual(receipt['result']['observation_errors'], errors)
+                self.assertEqual(z.read('owner-recheck.json'), path.read_bytes())
+
+    def test_unknown_errors_never_expose_raw_messages_or_untrusted_case_names(self):
+        errors = public_observation_errors({
+            'ou_history': {'kind': 'observation_error', 'message': 'C:\\Users\\private\\secret'},
+            'C:\\Users\\private\\bad': {'kind': 'observation_error', 'message': '<script>secret</script>'},
+        })
+        self.assertEqual({x['scenario'] for x in errors}, {'ou_history', 'other'})
+        self.assertNotIn('private', json.dumps(errors, ensure_ascii=False))
+        self.assertNotIn('secret', json.dumps(errors, ensure_ascii=False))

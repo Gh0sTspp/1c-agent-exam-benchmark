@@ -40,6 +40,25 @@ def complete(verification):
                 'sha256': fingerprint_id(verification['grader']['fingerprint'])}}
 
 
+def public_observation_errors(errors):
+    """Keep diagnosis useful without publishing arbitrary platform text or local paths."""
+    from exam_bench.grader import PROFILE
+    known_cases = set(PROFILE['cases'])
+    result = []
+    for case, error in sorted(errors.items()):
+        message = error.get('message', '') if isinstance(error, dict) else ''
+        if not isinstance(message, str):
+            message = ''
+        if ('Значение поля не соответствует установленному отбору' in message
+                and 'Регистр сведений: Спецификации; Поле: Период' in message):
+            reason = ('1С отклонила запись в регистр спецификаций: период записи не соответствует отбору. '
+                      'Сценарий не завершён; это само по себе не доказывает ошибку решения.')
+        else:
+            reason = 'Сценарий не завершился из-за ошибки наблюдения 1С; подробности сохранены в локальном протоколе.'
+        result.append({'scenario': case if case in known_cases else 'other', 'reason': reason})
+    return result
+
+
 def publish(record, folder, root, *, allow_incomplete=False):
     """Publish a new receipt, never edit or relabel an original contributor bundle."""
     if not record.get('owner_verification') or 'assessment' not in record or (record.get('errors') and not allow_incomplete):
@@ -59,6 +78,9 @@ def publish(record, folder, root, *, allow_incomplete=False):
                         for k, v in record['gates'].items()}}
     public.pop('downloads', None)
     public.pop('evaluation_sha256', None)
+    public.pop('observation_errors', None)
+    if record.get('errors'):
+        public['observation_errors'] = public_observation_errors(record['errors'])
     receipt = {'schema_version': 1, 'submission_id': folder.name,
                'original_manifest_sha256': record['original_manifest_sha256'],
                'owner_verification': record['owner_verification'], 'result': public,
