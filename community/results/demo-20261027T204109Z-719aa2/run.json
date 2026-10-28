@@ -1,0 +1,45 @@
+{
+  "client": "codex",
+  "model": "gpt-6.1-terra",
+  "client_version": "0.164.0",
+  "reasoning_effort": "medium",
+  "harness": "unica-0.15.0-rc.1",
+  "billing_channel": "subscription",
+  "solve_timeout_seconds": 7200,
+  "time_series": null,
+  "delegation": "native_disabled",
+  "network_profile": "open-book_shell",
+  "deadline_disclosed": true,
+  "statement_sha256": "8a6ccb3e673826d1f8220fda53eb310e3ec18c136d87ce8f4cebb2a08614e7e5",
+  "starter_dt_sha256": "f40d084818b0d1cfe503fc7653a6a13f1a8e47fcd1688dad6245b12744eb4638",
+  "profile_sha256": "5b47e5dd14389542737b95cbc1c9f90db6cf20afd18590c7c68c521a99a85329",
+  "execution_policy_sha256": "fd2cd554bb1eff56e5a09f817ecf5eaa2f4d29851499d98c9a0a1675fd07aa4b",
+  "calibration_sha256": "b57b402d029ee4222c0fbb663bd04b615214c3eb1b5c15285d063c044dc9613f",
+  "started_at": "2026-10-27T20:41:41.854558+00:00",
+  "timing": {
+    "prepare_ms": 27905,
+    "solve_ms": 7189663,
+    "grade_ms": null
+  },
+  "original_submission_valid": true,
+  "model_provenance": "requested_only",
+  "tokens": {
+    "input": 207039430,
+    "cached_input": 205883776,
+    "fresh_input": 1155654,
+    "output": 312289,
+    "reasoning_output": 91537,
+    "total": 207351719,
+    "coverage": "reported_completed_root_turns"
+  },
+  "tools": {
+    "mcp_calls": 1398,
+    "unica_calls": 1398,
+    "failed_calls": 44
+  },
+  "process": {
+    "status": "completed",
+    "exit_code": 0,
+    "stop_confirmed": true
+  }
+}
