@@ -1,0 +1,273 @@
+{
+  "schema_version": 1,
+  "objects": {
+    "items": "Catalog.Номенклатура",
+    "warehouses": "Catalog.Склады",
+    "receipt": "Document.ПриходнаяНакладная",
+    "sale": "Document.РасходнаяНакладная",
+    "manual": "Document.Операция",
+    "ledger": "AccountingRegister.Управленческий",
+    "accounts": "ChartOfAccounts.Управленческий"
+  },
+  "fields": {
+    "items": {
+      "article": "Артикул"
+    },
+    "receipt": {
+      "warehouse": "Склад",
+      "item": "СписокНоменклатуры.Номенклатура",
+      "quantity": "СписокНоменклатуры.Количество",
+      "price": "СписокНоменклатуры.Цена",
+      "amount": "СписокНоменклатуры.Сумма"
+    },
+    "sale": {
+      "warehouse": "Склад",
+      "item": "СписокНоменклатуры.Номенклатура",
+      "quantity": "СписокНоменклатуры.Количество",
+      "price": "СписокНоменклатуры.Цена",
+      "amount": "СписокНоменклатуры.Сумма"
+    },
+    "ledger": {
+      "item_debit": "СубконтоДт.Номенклатура",
+      "item_credit": "СубконтоКт.Номенклатура",
+      "warehouse_debit": "СубконтоДт.Склады",
+      "warehouse_credit": "СубконтоКт.Склады",
+      "quantity_debit": "КоличествоДт",
+      "quantity_credit": "КоличествоКт",
+      "amount": "Сумма"
+    }
+  },
+  "account_codes": {
+    "goods": "01.02",
+    "suppliers": "02.02",
+    "customers": "01.04",
+    "profit": "03"
+  },
+  "analogs": {
+    "mode": "register_pairs_transitive",
+    "object": "InformationRegister.АналогиНоменклатуры",
+    "left": "Номенклатура",
+    "right": "Аналог"
+  },
+  "additional_roles": {
+    "analog_groups": "InformationRegister.ГруппыАналогов",
+    "requested_item_subconto": "ChartOfCharacteristicTypes.ВидыСубконто.ЗаказаннаяНоменклатура",
+    "ou_batches": "AccumulationRegister.ПартииТоваров",
+    "ou_sales_register": "AccumulationRegister.Продажи"
+  },
+  "demo_data": {
+    "procedure": "CommonModule.ДемонстрационныеДанные.Заполнить"
+  },
+  "reports": {
+    "bu_sales": {
+      "object": "Report.ПродажиТоваровИАналогов",
+      "kind": "function",
+      "module": "manager",
+      "function": "ПолучитьДанные",
+      "fields": {
+        "item": "Номенклатура",
+        "sold": "Продано",
+        "quantity": "Количество",
+        "cost": "Себестоимость",
+        "revenue": "Продажа",
+        "profit": "Прибыль"
+      }
+    },
+    "ou_statement": {
+      "object": "Report.ВедомостьПоПодразделению",
+      "kind": "function",
+      "module": "manager",
+      "function": "ПолучитьДанные",
+      "fields": {
+        "item": "Номенклатура",
+        "characteristic": "Характеристика",
+        "opening": "НачальныйОстаток",
+        "receipt": "Приход",
+        "expense": "Расход",
+        "closing": "КонечныйОстаток",
+        "opening_qty": "НачальныйОстатокКоличество",
+        "receipt_qty": "ПриходКоличество",
+        "expense_qty": "РасходКоличество",
+        "closing_qty": "КонечныйОстатокКоличество"
+      }
+    },
+    "ou_sales": {
+      "object": "Report.ПродажиОперативныйУчет",
+      "kind": "function",
+      "module": "manager",
+      "function": "ПолучитьДанные",
+      "fields": {
+        "item": "Номенклатура",
+        "quantity": "Количество",
+        "cost": "Себестоимость",
+        "revenue": "Продажа",
+        "profit": "Прибыль"
+      }
+    },
+    "pr_bonus": {
+      "object": "Report.ПремииСотрудников",
+      "kind": "function",
+      "module": "manager",
+      "function": "ПолучитьДанные",
+      "fields": {
+        "employee": "Сотрудник",
+        "seniority": "ТрудовойСтаж",
+        "percent": "ПроцентПремии",
+        "amount": "СуммаПремии"
+      }
+    }
+  },
+  "ou": {
+    "objects": {
+      "departments": "Catalog.Подразделения",
+      "properties": "Catalog.СвойстваНоменклатуры",
+      "policies": "InformationRegister.УчетнаяПолитикаПодразделений",
+      "specification": "InformationRegister.СпецификацииСистемныхБлоков",
+      "stock": "AccumulationRegister.ОстаткиТоваров",
+      "receipt": "Document.ПриходнаяНакладная",
+      "sale": "Document.РасходнаяНакладная",
+      "assembly": "Document.Сборка",
+      "characteristics": "ChartOfCharacteristicTypes.ХарактеристикиНоменклатуры",
+      "property_values": "InformationRegister.ЗначенияСвойствНоменклатуры"
+    },
+    "fields": {
+      "properties": {
+        "owner": "Владелец"
+      },
+      "policies": {
+        "department": "Подразделение",
+        "method": "МетодСписания"
+      },
+      "policy_values": {
+        "fifo": "Enum.УчетнаяПолитика.ФИФО",
+        "lifo": "Enum.УчетнаяПолитика.ЛИФО",
+        "average": "Enum.УчетнаяПолитика.ПоСредней"
+      },
+      "specification": {
+        "block": "СистемныйБлок",
+        "item": "Деталь",
+        "property": "Свойство",
+        "quantity": "Количество"
+      },
+      "stock": {
+        "department": "Подразделение",
+        "item": "Номенклатура",
+        "property": "Свойство",
+        "quantity": "Количество",
+        "cost": "Стоимость"
+      },
+      "receipt": {
+        "department": "Подразделение",
+        "item": "СписокНоменклатуры.Номенклатура",
+        "property": "СписокНоменклатуры.Свойство",
+        "quantity": "СписокНоменклатуры.Количество",
+        "price": "СписокНоменклатуры.Цена",
+        "amount": "СписокНоменклатуры.Сумма"
+      },
+      "sale": {
+        "department": "СписокНоменклатуры.Подразделение",
+        "item": "СписокНоменклатуры.Номенклатура",
+        "quantity": "СписокНоменклатуры.Количество",
+        "price": "СписокНоменклатуры.Цена",
+        "amount": "СписокНоменклатуры.Сумма"
+      },
+      "assembly": {
+        "source": "ПодразделениеСписания",
+        "target": "ПодразделениеПоступления",
+        "block": "СистемныеБлоки.СистемныйБлок",
+        "block_quantity": "СистемныеБлоки.Количество",
+        "extra_item": "ДополнительныеДетали.Деталь",
+        "extra_property": "ДополнительныеДетали.Свойство",
+        "extra_quantity": "ДополнительныеДетали.Количество"
+      },
+      "property_values": {
+        "property": "Свойство",
+        "characteristic": "Характеристика",
+        "value": "Значение"
+      }
+    },
+    "set": {}
+  },
+  "pr": {
+    "objects": {
+      "employees": "Catalog.ФизическиеЛица",
+      "departments": "Catalog.Подразделения",
+      "schedules": "InformationRegister.ГрафикиРаботы",
+      "rates": "InformationRegister.СведенияОСотрудниках",
+      "scale": "InformationRegister.ШкалаПремий",
+      "accrual": "Document.НачислениеЗарплаты"
+    },
+    "results": [
+      {
+        "register": "CalculationRegister.ОсновныеНачисления",
+        "employee": "Сотрудник",
+        "department": "Подразделение",
+        "result": "Результат"
+      }
+    ],
+    "calc_types": {
+      "tariff": "ChartOfCalculationTypes.ОсновныеНачисления.Тариф",
+      "bonus": "ChartOfCalculationTypes.ОсновныеНачисления.ПремияРуководителю",
+      "trip": "ChartOfCalculationTypes.ОсновныеНачисления.Командировка"
+    },
+    "scale_unit": "years",
+    "fields": {
+      "schedules": {
+        "department": "Подразделение",
+        "date": "Дата",
+        "hours": "Значение",
+        "days": "Дни"
+      },
+      "rates": {
+        "employee": "Сотрудник",
+        "department": "Подразделение",
+        "rate": "Оклад"
+      },
+      "scale": {
+        "threshold": "СтажОтЛет",
+        "percent": "ПроцентПремии"
+      },
+      "employees": {
+        "seniority_start": "ДатаНачалаСтажа"
+      },
+      "accrual": {
+        "employee": "ОсновныеНачисления.Сотрудник",
+        "department": "ОсновныеНачисления.Подразделение",
+        "calc_type": "ОсновныеНачисления.ВидРасчета",
+        "start": "ОсновныеНачисления.ДатаНачала",
+        "end": "ОсновныеНачисления.ДатаОкончания"
+      }
+    },
+    "set": {
+      "accrual": {}
+    }
+  },
+  "forms": {
+    "objects": {
+      "counterparties": "Catalog.Контрагенты",
+      "managers": "Catalog.ФизическиеЛица",
+      "characteristics": "ChartOfCharacteristicTypes.ВидыДополнительныхСведений"
+    },
+    "form": "Catalog.Контрагенты.Form.ФормаЭлемента",
+    "fields": {
+      "counterparties": {
+        "manager": "Менеджер"
+      },
+      "managers": {
+        "list": "ДополнительныеСведенияКонтрагентов.ВидСведений"
+      }
+    },
+    "values": {
+      "kind": "table",
+      "characteristic": "ДополнительныеСведения.ВидСведений",
+      "value": "ДополнительныеСведения.Значение"
+    }
+  },
+  "interface": {
+    "sections": {
+      "ou": "Subsystem.ОперативныйУчет",
+      "bu": "Subsystem.БухгалтерскийУчет",
+      "pr": "Subsystem.ПериодическиеРасчеты"
+    }
+  }
+}
