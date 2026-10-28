@@ -350,10 +350,25 @@ def _make_pr(job_id, root=ROOT):
         raise ValueError('The author login differs from the authenticated GitHub account')
     branch = 'result/' + job_id
     # Idempotency across retries after an unknown network outcome.
-    existing = command([gh, 'pr', 'list', '--repo', UPSTREAM, '--head', login + ':' + branch,
-                        '--state', 'all', '--json', 'url', '--jq', '.[0].url // empty'])
-    if existing:
-        return existing
+    response = command([gh, 'api', '--method', 'GET', 'repos/' + UPSTREAM + '/pulls',
+                        '-f', 'state=all', '-f', 'head=' + login + ':' + branch, '-f', 'per_page=100'])
+    try:
+        candidates = json.loads(response)
+        if not isinstance(candidates, list):
+            raise ValueError('Unexpected PR response')
+        for candidate in candidates:
+            head = candidate.get('head') or {}
+            owner = (head.get('user') or {}).get('login', '')
+            url = candidate.get('html_url', '')
+            if (isinstance(owner, str) and owner.lower() == login.lower() and head.get('ref') == branch
+                    and isinstance(url, str) and re.fullmatch(r'https://github\.com/' + re.escape(UPSTREAM) + r'/pull/[1-9][0-9]*', url)):
+                return url
+        if candidates:
+            # The REST endpoint filters exact owner + branch, so a mismatching
+            # response cannot prove that it is safe to create another PR.
+            raise ValueError('GitHub returned unexpected pull requests for the result branch')
+    except (TypeError, AttributeError, json.JSONDecodeError):
+        raise ValueError('Unexpected PR response') from None
     fork = UPSTREAM if login.lower() == UPSTREAM.split('/')[0].lower() else login + '/' + UPSTREAM.split('/')[1]
     if fork != UPSTREAM:
         command([gh, 'repo', 'fork', UPSTREAM, '--clone=false'])

@@ -115,13 +115,30 @@ class CommunityBundle(unittest.TestCase):
             validate_bundle(f)
 
     def test_pr_retry_returns_existing_without_pushing(self):
+        for state in ('open', 'closed'):
+            with self.subTest(state=state), tempfile.TemporaryDirectory() as td:
+                root = Path(td); f = fixture(root)
+                dest = root / '.local/community/prepared/demo-test'; dest.parent.mkdir(parents=True)
+                f.rename(dest)
+                url = 'https://github.com/zeegin/1c-agent-exam-benchmark/pull/123'
+                response = json.dumps([{'html_url': url, 'state': state,
+                    'head': {'ref': 'result/demo-test', 'user': {'login': 'tester'}}}])
+                with patch('tools.community_results.executable', side_effect=lambda x: x), patch('tools.community_results.command', side_effect=['tester', response]) as cmd:
+                    self.assertEqual(make_pr('demo-test', root), url)
+                    self.assertEqual(cmd.call_count, 2)
+                    self.assertIn('head=tester:result/demo-test', cmd.call_args_list[1].args[0])
+
+    def test_pr_does_not_reuse_another_authors_branch(self):
         with tempfile.TemporaryDirectory() as td:
             root = Path(td); f = fixture(root)
             dest = root / '.local/community/prepared/demo-test'; dest.parent.mkdir(parents=True)
             f.rename(dest)
-            url = 'https://github.com/zeegin/1c-agent-exam-benchmark/pull/123'
-            with patch('tools.community_results.executable', side_effect=lambda x: x), patch('tools.community_results.command', side_effect=['tester', url]) as cmd:
-                self.assertEqual(make_pr('demo-test', root), url)
+            foreign = json.dumps([{'html_url': 'https://github.com/zeegin/1c-agent-exam-benchmark/pull/123',
+                'head': {'ref': 'result/demo-test', 'user': {'login': 'other-author'}}}])
+            with patch('tools.community_results.executable', side_effect=lambda x: x), \
+                 patch('tools.community_results.command', side_effect=['tester', foreign]) as cmd:
+                with self.assertRaisesRegex(ValueError, 'unexpected pull requests'):
+                    make_pr('demo-test', root)
                 self.assertEqual(cmd.call_count, 2)
 
     def test_pr_pushes_only_bundle_in_separate_checkout(self):
@@ -130,7 +147,7 @@ class CommunityBundle(unittest.TestCase):
             dest = root / '.local/community/prepared/demo-test'; dest.parent.mkdir(parents=True)
             f.rename(dest)
             url = 'https://github.com/zeegin/1c-agent-exam-benchmark/pull/123'
-            outputs = ['tester', '', '', 'https', '', 'main', '', '', '', '', '', '', url]
+            outputs = ['tester', '[]', '', 'https', '', 'main', '', '', '', '', '', '', url]
             with patch('tools.community_results.executable', side_effect=lambda x:x), patch('tools.community_results.command', side_effect=outputs) as cmd:
                 self.assertEqual(make_pr('demo-test', root), url)
                 calls = [c.args for c in cmd.call_args_list]
@@ -167,7 +184,7 @@ class CommunityBundle(unittest.TestCase):
             self.assertGreater(len(str(copied / deep.relative_to(f))), 260)
             url = 'https://github.com/zeegin/1c-agent-exam-benchmark/pull/123'
             def run(args, cwd=root):
-                return {('api', 'user'): 'tester', ('repo', 'view'): 'main', ('pr', 'create'): url}.get(tuple(args[1:3]), '')
+                return {('api', 'user'): 'tester', ('api', '--method'): '[]', ('repo', 'view'): 'main', ('pr', 'create'): url}.get(tuple(args[1:3]), '')
             try:
                 with patch('tools.community_results.executable', side_effect=lambda x: x), \
                      patch('tools.community_results.command', side_effect=run):
@@ -213,6 +230,7 @@ class CommunityBundle(unittest.TestCase):
                 url = 'https://github.com/zeegin/1c-agent-exam-benchmark/pull/123'
                 def run(args, cwd=root):
                     if args[1:3] == ['api', 'user']: return 'tester'
+                    if args[1:3] == ['api', '--method']: return '[]'
                     if args[1:3] == ['config', 'get']: return protocol
                     if args[1:3] == ['repo', 'view']: return 'main'
                     if args[1:3] == ['pr', 'create']: return url

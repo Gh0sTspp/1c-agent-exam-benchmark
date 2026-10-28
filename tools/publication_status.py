@@ -1,6 +1,7 @@
 """Identify published and previously submitted local runs without blocking UI polling."""
 import json
 import os
+import queue
 import re
 import subprocess
 import threading
@@ -10,37 +11,69 @@ from pathlib import Path
 from tools.community_results import UPSTREAM, check_id, executable, read
 
 _PR_URL = re.compile(r'^https://github\.com/' + re.escape(UPSTREAM) + r'/pull/[1-9][0-9]*$')
+_LOGIN = re.compile(r'^[A-Za-z0-9](?:[A-Za-z0-9-]{0,37}[A-Za-z0-9])?$')
 _cache = {}
 _lock = threading.Lock()
 _TTL = 60
+_queue = queue.Queue()
+_workers_started = False
 
 
-def _scan_remote(root):
-    """GitHub is consulted in a background thread; failures remain unknown."""
+def _scan_remote(target):
+    """Inspect only one exact owner/branch or saved PR URL; failures remain unknown."""
     try:
         opts = {'creationflags': subprocess.CREATE_NO_WINDOW} if os.name == 'nt' else {}
-        process = subprocess.run([executable('gh'), 'pr', 'list', '--repo', UPSTREAM,
-            '--state', 'all', '--limit', '200', '--json', 'url,state,headRefName,headRepositoryOwner'],
+        fields = 'url,state,headRefName,headRepositoryOwner'
+        if target[0] == 'branch':
+            args = [executable('gh'), 'api', '--method', 'GET', 'repos/' + UPSTREAM + '/pulls',
+                    '-f', 'state=all', '-f', 'head=' + target[1] + ':result/' + target[2], '-f', 'per_page=100']
+        else:
+            args = [executable('gh'), 'pr', 'view', target[1], '--repo', UPSTREAM, '--json', fields]
+        process = subprocess.run(args,
             cwd=Path(__file__).resolve().parents[1], capture_output=True, text=True,
             encoding='utf-8', errors='replace', timeout=10, **opts)
         entries = json.loads(process.stdout) if process.returncode == 0 else None
+        if target[0] == 'branch' and isinstance(entries, list):
+            entries = [{'url': pr.get('html_url'), 'state': 'MERGED' if pr.get('merged_at') else pr.get('state'),
+                        'headRefName': (pr.get('head') or {}).get('ref'),
+                        'headRepositoryOwner': (pr.get('head') or {}).get('user')}
+                       if isinstance(pr, dict) else None for pr in entries]
+        if target[0] == 'url' and isinstance(entries, dict):
+            entries = [entries]
         if not isinstance(entries, list):
             entries = None
-    except (ValueError, OSError, subprocess.TimeoutExpired):
+    except (ValueError, TypeError, AttributeError, OSError, subprocess.TimeoutExpired):
         entries = None
     with _lock:
-        _cache[str(root.resolve())] = {'entries': entries, 'time': time.monotonic(), 'working': False}
+        _cache[target] = {'entries': entries, 'time': time.monotonic(), 'working': False}
 
 
-def remote_entries(root):
-    key = str(root.resolve())
+def _worker():
+    while True:
+        target = _queue.get()
+        try:
+            _scan_remote(target)
+        except Exception:
+            # Keep the worker alive and leave this target safely unconfirmed.
+            with _lock:
+                _cache[target] = {'entries': None, 'time': time.monotonic(), 'working': False}
+        finally:
+            _queue.task_done()
+
+
+def remote_entries(target):
+    global _workers_started
     with _lock:
-        current = _cache.get(key)
+        current = _cache.get(target)
         if current is None or (not current['working'] and time.monotonic() - current['time'] >= _TTL):
             current = {'entries': None if current is None else current['entries'],
                        'time': time.monotonic(), 'working': True}
-            _cache[key] = current
-            threading.Thread(target=_scan_remote, args=(root,), daemon=True).start()
+            _cache[target] = current
+            if not _workers_started:
+                for _ in range(3):
+                    threading.Thread(target=_worker, daemon=True).start()
+                _workers_started = True
+            _queue.put(target)
         return current['entries'], current['working']
 
 
@@ -81,7 +114,7 @@ def publication_index(root):
             measurement = _safe_read(path.parent / 'measurement.json')
         operator = measurement.get('operator') or {}
         login = operator.get('github', '') if isinstance(operator, dict) else ''
-        jobs[path.parent.name] = (run, login if isinstance(login, str) else '')
+        jobs[path.parent.name] = (run, login if isinstance(login, str) and _LOGIN.fullmatch(login) else '')
     receipts = {}
     for path in (root / '.local/community/pr').glob('*.json'):
         if path.stem not in jobs:
@@ -89,27 +122,47 @@ def publication_index(root):
         url = _safe_read(path).get('url')
         if isinstance(url, str) and _PR_URL.fullmatch(url):
             receipts.setdefault(jobs[path.stem][0], set()).add(url)
-    # Without a receipt or an author identity there is no safe way to match a
-    # remote branch to a local job, so skip network work altogether.
-    identifiable = {run for run, login in jobs.values() if login} | set(receipts)
-    entries, _ = remote_entries(root) if identifiable else ([], False)
     found = {}
-    if entries is not None:
+    unresolved = set()
+    def process(run, target):
+        entries, _ = remote_entries(target)
+        if entries is None:
+            unresolved.add(run)
+            return
+        matched = False
+        invalid = False
         for pr in entries:
             if not isinstance(pr, dict):
+                invalid = True
                 continue
             url, state = pr.get('url'), str(pr.get('state', '')).upper()
             if not isinstance(url, str) or not _PR_URL.fullmatch(url) or state not in ('OPEN', 'MERGED', 'CLOSED'):
+                invalid = True
                 continue
             owner = pr.get('headRepositoryOwner') or {}
             owner = owner.get('login', '') if isinstance(owner, dict) else ''
-            branch = pr.get('headRefName', '')
-            job = branch[7:] if isinstance(branch, str) and branch.startswith('result/') else ''
-            matched_runs = {run for run, urls in receipts.items() if url in urls}
-            if job in jobs and jobs[job][1] and isinstance(owner, str) and owner.lower() == jobs[job][1].lower():
-                matched_runs.add(jobs[job][0])
-            for run in matched_runs:
+            if target[0] == 'url':
+                matches = url == target[1]
+                invalid = invalid or not matches
+            else:
+                if pr.get('headRefName') != 'result/' + target[2] or not isinstance(owner, str) or not owner:
+                    invalid = True
+                    continue
+                matches = (pr.get('headRefName') == 'result/' + target[2] and isinstance(owner, str)
+                           and owner.lower() == target[1].lower())
+            if matches:
                 found.setdefault(run, []).append((state, url))
+                matched = True
+        # A mismatched/nonconforming response cannot establish absence.
+        if invalid or (len(entries) >= 100 and not matched):
+            unresolved.add(run)
+    for job, (run, login) in jobs.items():
+        if login and run not in published:
+            process(run, ('branch', login, job))
+    for run, urls in receipts.items():
+        if run not in published:
+            for url in urls:
+                process(run, ('url', url))
     def lookup(run):
         if run in published:
             return {'state': 'published', 'blocked': True}
@@ -121,6 +174,5 @@ def publication_index(root):
         urls = sorted(receipts.get(run, set()))
         if urls:
             return {'state': 'unknown', 'url': urls[0], 'blocked': True}
-        # A capped response cannot establish that an older PR does not exist.
-        return {'state': 'unknown', 'blocked': bool(run in identifiable and (entries is None or len(entries) >= 200))}
+        return {'state': 'unknown', 'blocked': run in unresolved}
     return lookup

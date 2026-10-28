@@ -5,7 +5,7 @@ from pathlib import Path
 from unittest.mock import Mock, patch
 
 from tools.community_results import write
-from tools.publication_status import _scan_remote, publication_index
+from tools.publication_status import _cache, _scan_remote, publication_index
 from tools.community_service import start
 
 
@@ -65,6 +65,15 @@ class PublicationStatusTests(unittest.TestCase):
         pr['headRefName'] = 'result/demo-other'
         self.assertEqual(self.index([pr])('run-original')['state'], 'unknown')
 
+    def test_foreign_branch_is_not_treated_as_our_submission(self):
+        url = 'https://github.com/zeegin/1c-agent-exam-benchmark/pull/56'
+        foreign = {'url': url, 'state': 'OPEN', 'headRefName': 'result/demo-regrade',
+                   'headRepositoryOwner': {'login': 'other'}}
+        def response(target):
+            return ([foreign], False) if target == ('branch', 'tester', 'demo-regrade') else ([], False)
+        with patch('tools.publication_status.remote_entries', side_effect=response):
+            self.assertEqual(publication_index(self.root)('run-original'), {'state': 'unknown', 'blocked': False})
+
     def test_untrusted_urls_and_unrelated_manifests_do_not_count(self):
         write(self.root / 'community/results/other/manifest.json',
               {'submission_id': 'not-other', 'run_id': 'run-original'})
@@ -101,7 +110,7 @@ class PublicationStatusTests(unittest.TestCase):
             return Mock(returncode=0, stdout='[]')
         with patch('tools.publication_status.executable', return_value='gh'), \
              patch('tools.publication_status.subprocess.run', side_effect=run):
-            thread = threading.Thread(target=_scan_remote, args=(self.root,))
+            thread = threading.Thread(target=_scan_remote, args=(('branch', 'tester', 'demo-new'),))
             thread.start()
             try:
                 self.assertTrue(entered.wait(5))
@@ -111,6 +120,48 @@ class PublicationStatusTests(unittest.TestCase):
                 release.set()
                 thread.join(5)
             self.assertFalse(thread.is_alive())
+
+    def test_remote_queries_target_the_exact_branch_and_saved_pr(self):
+        url = 'https://github.com/zeegin/1c-agent-exam-benchmark/pull/55'
+        responses = [Mock(returncode=0, stdout='[]'),
+                     Mock(returncode=0, stdout='{"url":"' + url + '","state":"CLOSED"}')]
+        with patch('tools.publication_status.executable', return_value='gh'), \
+             patch('tools.publication_status.subprocess.run', side_effect=responses) as run:
+            _scan_remote(('branch', 'tester', 'demo-new'))
+            _scan_remote(('url', url))
+        branch = run.call_args_list[0].args[0]
+        saved_pr = run.call_args_list[1].args[0]
+        self.assertEqual(branch[1:4], ['api', '--method', 'GET'])
+        self.assertIn('head=tester:result/demo-new', branch)
+        self.assertEqual(saved_pr[1:4], ['pr', 'view', url])
+        self.assertTrue(all(call.kwargs['timeout'] == 10 for call in run.call_args_list))
+
+    def test_many_unrelated_pull_requests_do_not_block_new_branch(self):
+        # The remote response is scoped to this branch; unrelated repository PRs
+        # never enter the result, regardless of their number.
+        self.assertEqual(self.index([])('run-new'), {'state': 'unknown', 'blocked': False})
+
+    def test_malformed_rest_head_is_unknown_and_worker_result_is_not_stuck(self):
+        target = ('branch', 'tester', 'demo-bad')
+        with patch('tools.publication_status.executable', return_value='gh'), \
+             patch('tools.publication_status.subprocess.run', return_value=Mock(returncode=0, stdout='[{"head":"wrong"}]')):
+            _scan_remote(target)
+        self.assertIsNone(_cache[target]['entries'])
+        self.assertFalse(_cache[target]['working'])
+
+    def test_rest_merged_and_graphql_closed_are_distinguished(self):
+        import json
+        url = 'https://github.com/zeegin/1c-agent-exam-benchmark/pull/55'
+        rest = [{'html_url': url, 'state': 'closed', 'merged_at': '2026-10-29T01:00:00Z',
+                 'head': {'ref': 'result/demo-new', 'user': {'login': 'tester'}}}]
+        graph = {'url': url, 'state': 'CLOSED'}
+        responses = [Mock(returncode=0, stdout=json.dumps(rest)), Mock(returncode=0, stdout=json.dumps(graph))]
+        with patch('tools.publication_status.executable', return_value='gh'), \
+             patch('tools.publication_status.subprocess.run', side_effect=responses):
+            _scan_remote(('branch', 'tester', 'demo-new'))
+            _scan_remote(('url', url))
+        self.assertEqual(_cache[('branch', 'tester', 'demo-new')]['entries'][0]['state'], 'MERGED')
+        self.assertEqual(_cache[('url', url)]['entries'][0]['state'], 'CLOSED')
 
 
 if __name__ == '__main__':
