@@ -20,7 +20,7 @@
     <label>Модель<select id="f-model" class="field"></select></label>
     <label>Харнес<select id="f-harness" class="field"></select></label>
     <label class="mobile-sort">Сортировка<select id="mobile-sort" class="field">
-      <option value="score">По результату</option><option value="solve">По времени</option>
+      <option value="penalties">По штрафным баллам</option><option value="score">По результату</option><option value="solve">По времени</option>
       <option value="tokens">По токенам</option><option value="date">Сначала новые</option>
     </select></label>
     <span class="why" id="summary"></span>
@@ -29,7 +29,7 @@
     <table class="data board">
       <thead><tr>
         <th class="num">#</th>
-        <th><button class="sort" data-key="score">Результат</button></th>
+        <th><button class="sort" data-key="score">Результат</button><br><button class="sort" data-key="penalties">Штрафные баллы</button></th>
         <th>Модель, агент, харнес</th>
         <th class="num"><button class="sort" data-key="solve">Решение</button></th>
         <th class="num"><button class="sort" data-key="tokens" title="Сортировка по новым входным токенам">API / токены</button></th>

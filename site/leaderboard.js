@@ -18,7 +18,7 @@ const harnessName = h => !h || h === 'none' ? 'Без харнеса' : h;
 const systems = {Darwin: 'macOS', Windows: 'Windows', Linux: 'Linux'};
 const arch = a => ({amd64: 'x64', x86_64: 'x64', arm64: 'arm64', aarch64: 'arm64'})[String(a).toLowerCase()] || a;
 const isolation = {'dedicated-host': 'без песочницы', macos: 'песочница macOS', bubblewrap: 'песочница Linux'};
-let rows = [], sort = {key: 'score', dir: -1}, local = null, submit = null;
+let rows = [], sort = {key: 'penalties', dir: 1}, local = null, submit = null;
 
 function fromCommunity(r) {
   const v = r.result, c = r.conditions || {}, m = r.measurement || {};
@@ -46,6 +46,32 @@ const exact = r => r.e.score != null && !r.e.infrastructure_errors && !stale(r);
 const value = r => Number(exact(r) ? r.e.score : Math.max(0, r.e.score_upper_bound ?? 0));
 const keys = {score: r => value(r) + (exact(r) ? 0.001 : 0), solve: r => r.e.solve_seconds, tokens: r => r.tokens.fresh_input ?? -1,
   date: r => Date.parse(r.date) || 0};
+
+// Use the recorded deductions, never the clamped score or its upper bound.
+export function penaltyPoints(e) {
+  const parse = v => {
+    if ((typeof v !== 'string' && typeof v !== 'number') || (typeof v === 'string' && !v.trim())) return null;
+    const n = Number(v);
+    return Number.isFinite(n) && n >= 0 ? n : null;
+  };
+  if (e?.deductions != null) return parse(e.deductions);
+  if (!Array.isArray(e?.charges) || !e.charges.length) return null;
+  const points = e.charges.map(c => parse(c?.points));
+  return points.some(n => n == null) ? null : Number(points.reduce((a, b) => a + b, 0).toPrecision(12));
+}
+
+export function comparePenalties(a, b, direction = 1) {
+  const x = penaltyPoints(a.e), y = penaltyPoints(b.e);
+  if (x == null || y == null) return x == null ? (y == null ? 0 : 1) : -1;
+  return direction * (x - y);
+}
+
+export function penaltyLabel(e) {
+  const n = penaltyPoints(e);
+  if (n == null) return 'штрафные баллы: нет данных';
+  const partial = e.infrastructure_errors || e.score == null || Number(e.not_assessed) > 0 || Number(e.counts?.inconclusive) > 0;
+  return `штрафные баллы: ${number(n)}${partial ? ' · проверка неполная' : ''}`;
+}
 
 function filtersMatch(r) {
   return ['agent', 'model', 'harness'].every(k => !$('f-' + k).value || String(r[k]) === $('f-' + k).value);
@@ -177,6 +203,16 @@ function openRun(r) {
   errors.querySelector('h4').textContent = 'Ошибки в решении';
   const intro = node('p', 'Откройте карточку, чтобы увидеть код и обоснование.', 'run-intro');
   errors.insertBefore(intro, errors.children[1] || null);
+  if (Array.isArray(r.e.observation_errors) && r.e.observation_errors.length) {
+    const reasons = node('details');
+    reasons.append(node('summary', 'Причины неполной проверки'));
+    const list = node('ul');
+    for (const problem of r.e.observation_errors) {
+      if (problem && typeof problem.scenario === 'string' && typeof problem.reason === 'string')
+        list.append(node('li', `${problem.scenario}: ${problem.reason}`));
+    }
+    if (list.children.length) { reasons.append(list); errors.insertBefore(reasons, intro.nextSibling); }
+  }
   if (!r.e.charges?.length) errors.append(node('p', 'Штрафов не начислено. Это не подтверждает выполнение непроверенных требований.', 'why'));
   const checks = node('section'); checks.append(node('h3', 'Проверки билета'));
   const verdicts = {fail: ['Не пройдены', 'fail'], inconclusive: ['Недостаточно данных', 'unknown'], pass: ['Пройдены', 'pass']};
@@ -246,7 +282,8 @@ function openRun(r) {
 }
 
 function render() {
-  const visible = rows.filter(filtersMatch).sort((a, b) => sort.dir * (keys[sort.key](a) - keys[sort.key](b)) || a.e.solve_seconds - b.e.solve_seconds);
+  const visible = rows.filter(filtersMatch).sort((a, b) => (sort.key === 'penalties'
+    ? comparePenalties(a, b, sort.dir) : sort.dir * (keys[sort.key](a) - keys[sort.key](b))) || a.e.solve_seconds - b.e.solve_seconds);
   // Places count only accepted results with an exact score, in score order.
   const ranked = rows.filter(r => !r.local && exact(r)).sort((a, b) => value(b) - value(a) || a.e.solve_seconds - b.e.solve_seconds);
   const places = new Map(ranked.map((r, i) => [r.id, i + 1]));
@@ -258,8 +295,7 @@ function render() {
     score.append(node('b', exact(r) ? `${number(r.e.score)} из 5` : `не выше ${number(Math.max(0, r.e.score_upper_bound))} из 5`, 'score-value'));
     sub(score, grades[r.e.grade]);
     if (stale(r)) { const b = node('span', 'требуется пересчёт', 'badge warn'); b.title = 'Оценка выполнена прежним грейдером; подробности внутри прогона.'; score.append(b); }
-    const total = Object.values(r.e.counts || {}).reduce((a, b) => a + b, 0);
-    sub(score, `проверок ${r.e.counts?.pass || 0} из ${total}`);
+    sub(score, penaltyLabel(r.e));
     if (r.verification === 'repository_owner') {
       const verification = node('small', '✓ проверил владелец', 'mobile-verification');
       verification.title = 'Перепроверено владельцем репозитория';
@@ -329,11 +365,11 @@ async function load() {
 for (const id of ['f-agent', 'f-model', 'f-harness']) $(id).addEventListener('change', render);
 $('mobile-sort').addEventListener('change', () => {
   const key = $('mobile-sort').value;
-  sort = {key, dir: key === 'solve' || key === 'tokens' ? 1 : -1};
+  sort = {key, dir: key === 'solve' || key === 'tokens' || key === 'penalties' ? 1 : -1};
   render();
 });
 for (const th of document.querySelectorAll('.sort')) th.addEventListener('click', () => {
-  sort = {key: th.dataset.key, dir: sort.key === th.dataset.key ? -sort.dir : (th.dataset.key === 'solve' || th.dataset.key === 'tokens' ? 1 : -1)};
+  sort = {key: th.dataset.key, dir: sort.key === th.dataset.key ? -sort.dir : (th.dataset.key === 'solve' || th.dataset.key === 'tokens' || th.dataset.key === 'penalties' ? 1 : -1)};
   $('mobile-sort').value = sort.key;
   render();
 });
