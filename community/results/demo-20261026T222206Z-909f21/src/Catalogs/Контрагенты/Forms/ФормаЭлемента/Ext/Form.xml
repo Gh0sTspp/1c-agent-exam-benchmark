@@ -1,0 +1,11 @@
+<?xml version="1.0" encoding="UTF-8"?>
+<Form xmlns="http://v8.1c.ru/8.3/xcf/logform" xmlns:cfg="http://v8.1c.ru/8.1/data/enterprise/current-config" xmlns:v8="http://v8.1c.ru/8.1/data/core" xmlns:xs="http://www.w3.org/2001/XMLSchema" xmlns:xsi="http://www.w3.org/2001/XMLSchema-instance" version="2.20">
+ <AutoCommandBar name="ФормаКоманднаяПанель" id="-1"/>
+ <ChildItems>
+  <InputField name="Код" id="1"><DataPath>Объект.Код</DataPath><ContextMenu name="КодКонтекстноеМеню" id="2"/><ExtendedTooltip name="КодПодсказка" id="3"/></InputField>
+  <InputField name="Наименование" id="4"><DataPath>Объект.Наименование</DataPath><ContextMenu name="НаименованиеКонтекстноеМеню" id="5"/><ExtendedTooltip name="НаименованиеПодсказка" id="6"/></InputField>
+  <InputField name="Менеджер" id="7"><DataPath>Объект.Менеджер</DataPath><ContextMenu name="МенеджерКонтекстноеМеню" id="8"/><ExtendedTooltip name="МенеджерПодсказка" id="9"/><Events><Event name="OnChange">МенеджерПриИзменении</Event></Events></InputField>
+ </ChildItems>
+ <Attributes><Attribute name="Объект" id="1"><Type><v8:Type>cfg:CatalogObject.Контрагенты</v8:Type></Type><MainAttribute>true</MainAttribute></Attribute></Attributes>
+ <Events><Event name="OnCreateAtServer">ПриСозданииНаСервере</Event><Event name="BeforeWriteAtServer">ПередЗаписьюНаСервере</Event></Events>
+</Form>
