@@ -1,0 +1,70 @@
+<?xml version='1.0' encoding='UTF-8'?>
+<CommandInterface xmlns="http://v8.1c.ru/8.3/xcf/extrnprops" xmlns:xr="http://v8.1c.ru/8.3/xcf/readable" xmlns:xs="http://www.w3.org/2001/XMLSchema" xmlns:xsi="http://www.w3.org/2001/XMLSchema-instance" version="2.20">
+  <CommandsVisibility>
+    <Command name="Catalog.Номенклатура.StandardCommand.OpenList">
+      <Visibility>
+        <xr:Common>true</xr:Common>
+      </Visibility>
+    </Command>
+    <Command name="Catalog.Подразделения.StandardCommand.OpenList">
+      <Visibility>
+        <xr:Common>true</xr:Common>
+      </Visibility>
+    </Command>
+    <Command name="Catalog.СвойстваНоменклатуры.StandardCommand.OpenList">
+      <Visibility>
+        <xr:Common>true</xr:Common>
+      </Visibility>
+    </Command>
+    <Command name="ChartOfCharacteristicTypes.СвойстваОбъектов.StandardCommand.OpenList">
+      <Visibility>
+        <xr:Common>true</xr:Common>
+      </Visibility>
+    </Command>
+    <Command name="InformationRegister.ПолитикиПодразделений.StandardCommand.OpenList">
+      <Visibility>
+        <xr:Common>true</xr:Common>
+      </Visibility>
+    </Command>
+    <Command name="InformationRegister.Спецификации.StandardCommand.OpenList">
+      <Visibility>
+        <xr:Common>true</xr:Common>
+      </Visibility>
+    </Command>
+    <Command name="InformationRegister.ЗначенияСвойств.StandardCommand.OpenList">
+      <Visibility>
+        <xr:Common>true</xr:Common>
+      </Visibility>
+    </Command>
+    <Command name="AccumulationRegister.ОстаткиНоменклатуры.StandardCommand.OpenList">
+      <Visibility>
+        <xr:Common>true</xr:Common>
+      </Visibility>
+    </Command>
+    <Command name="AccumulationRegister.ПродажиОперативные.StandardCommand.OpenList">
+      <Visibility>
+        <xr:Common>true</xr:Common>
+      </Visibility>
+    </Command>
+    <Command name="Document.ПриходнаяНакладная.StandardCommand.OpenList">
+      <Visibility>
+        <xr:Common>true</xr:Common>
+      </Visibility>
+    </Command>
+    <Command name="Document.РасходнаяНакладная.StandardCommand.OpenList">
+      <Visibility>
+        <xr:Common>true</xr:Common>
+      </Visibility>
+    </Command>
+    <Command name="Document.Сборка.StandardCommand.OpenList">
+      <Visibility>
+        <xr:Common>true</xr:Common>
+      </Visibility>
+    </Command>
+    <Command name="AccumulationRegister.ПартииНоменклатуры.StandardCommand.OpenList">
+      <Visibility>
+        <xr:Common>true</xr:Common>
+      </Visibility>
+    </Command>
+  <Command name="Document.ПриходнаяНакладная.StandardCommand.Create"><Visibility><xr:Common>true</xr:Common></Visibility></Command><Command name="Document.РасходнаяНакладная.StandardCommand.Create"><Visibility><xr:Common>true</xr:Common></Visibility></Command><Command name="Document.Сборка.StandardCommand.Create"><Visibility><xr:Common>true</xr:Common></Visibility></Command><Command name="Report.ВедомостьПодразделения.StandardCommand.Open"><Visibility><xr:Common>true</xr:Common></Visibility></Command><Command name="Report.ПродажиОперативные.StandardCommand.Open"><Visibility><xr:Common>true</xr:Common></Visibility></Command></CommandsVisibility>
+<CommandsPlacement><Command name="Catalog.Номенклатура.StandardCommand.OpenList"><CommandGroup>NavigationPanelOrdinary</CommandGroup><Placement>Auto</Placement></Command><Command name="Catalog.Подразделения.StandardCommand.OpenList"><CommandGroup>NavigationPanelOrdinary</CommandGroup><Placement>Auto</Placement></Command><Command name="Catalog.СвойстваНоменклатуры.StandardCommand.OpenList"><CommandGroup>NavigationPanelOrdinary</CommandGroup><Placement>Auto</Placement></Command><Command name="ChartOfCharacteristicTypes.СвойстваОбъектов.StandardCommand.OpenList"><CommandGroup>NavigationPanelSeeAlso</CommandGroup><Placement>Auto</Placement></Command><Command name="InformationRegister.ПолитикиПодразделений.StandardCommand.OpenList"><CommandGroup>NavigationPanelSeeAlso</CommandGroup><Placement>Auto</Placement></Command><Command name="InformationRegister.Спецификации.StandardCommand.OpenList"><CommandGroup>NavigationPanelSeeAlso</CommandGroup><Placement>Auto</Placement></Command><Command name="InformationRegister.ЗначенияСвойств.StandardCommand.OpenList"><CommandGroup>NavigationPanelSeeAlso</CommandGroup><Placement>Auto</Placement></Command><Command name="AccumulationRegister.ОстаткиНоменклатуры.StandardCommand.OpenList"><CommandGroup>NavigationPanelSeeAlso</CommandGroup><Placement>Auto</Placement></Command><Command name="AccumulationRegister.ПродажиОперативные.StandardCommand.OpenList"><CommandGroup>NavigationPanelSeeAlso</CommandGroup><Placement>Auto</Placement></Command><Command name="Document.ПриходнаяНакладная.StandardCommand.OpenList"><CommandGroup>NavigationPanelImportant</CommandGroup><Placement>Auto</Placement></Command><Command name="Document.РасходнаяНакладная.StandardCommand.OpenList"><CommandGroup>NavigationPanelImportant</CommandGroup><Placement>Auto</Placement></Command><Command name="Document.Сборка.StandardCommand.OpenList"><CommandGroup>NavigationPanelImportant</CommandGroup><Placement>Auto</Placement></Command><Command name="AccumulationRegister.ПартииНоменклатуры.StandardCommand.OpenList"><CommandGroup>NavigationPanelSeeAlso</CommandGroup><Placement>Auto</Placement></Command><Command name="Document.ПриходнаяНакладная.StandardCommand.Create"><CommandGroup>ActionsPanelCreate</CommandGroup><Placement>Auto</Placement></Command><Command name="Document.РасходнаяНакладная.StandardCommand.Create"><CommandGroup>ActionsPanelCreate</CommandGroup><Placement>Auto</Placement></Command><Command name="Document.Сборка.StandardCommand.Create"><CommandGroup>ActionsPanelCreate</CommandGroup><Placement>Auto</Placement></Command><Command name="Report.ВедомостьПодразделения.StandardCommand.Open"><CommandGroup>ActionsPanelReports</CommandGroup><Placement>Auto</Placement></Command><Command name="Report.ПродажиОперативные.StandardCommand.Open"><CommandGroup>ActionsPanelReports</CommandGroup><Placement>Auto</Placement></Command></CommandsPlacement><CommandsOrder><Command name="Catalog.Номенклатура.StandardCommand.OpenList"><CommandGroup>NavigationPanelOrdinary</CommandGroup></Command><Command name="Catalog.Подразделения.StandardCommand.OpenList"><CommandGroup>NavigationPanelOrdinary</CommandGroup></Command><Command name="Catalog.СвойстваНоменклатуры.StandardCommand.OpenList"><CommandGroup>NavigationPanelOrdinary</CommandGroup></Command><Command name="ChartOfCharacteristicTypes.СвойстваОбъектов.StandardCommand.OpenList"><CommandGroup>NavigationPanelSeeAlso</CommandGroup></Command><Command name="InformationRegister.ПолитикиПодразделений.StandardCommand.OpenList"><CommandGroup>NavigationPanelSeeAlso</CommandGroup></Command><Command name="InformationRegister.Спецификации.StandardCommand.OpenList"><CommandGroup>NavigationPanelSeeAlso</CommandGroup></Command><Command name="InformationRegister.ЗначенияСвойств.StandardCommand.OpenList"><CommandGroup>NavigationPanelSeeAlso</CommandGroup></Command><Command name="AccumulationRegister.ОстаткиНоменклатуры.StandardCommand.OpenList"><CommandGroup>NavigationPanelSeeAlso</CommandGroup></Command><Command name="AccumulationRegister.ПродажиОперативные.StandardCommand.OpenList"><CommandGroup>NavigationPanelSeeAlso</CommandGroup></Command><Command name="Document.ПриходнаяНакладная.StandardCommand.OpenList"><CommandGroup>NavigationPanelImportant</CommandGroup></Command><Command name="Document.РасходнаяНакладная.StandardCommand.OpenList"><CommandGroup>NavigationPanelImportant</CommandGroup></Command><Command name="Document.Сборка.StandardCommand.OpenList"><CommandGroup>NavigationPanelImportant</CommandGroup></Command><Command name="AccumulationRegister.ПартииНоменклатуры.StandardCommand.OpenList"><CommandGroup>NavigationPanelSeeAlso</CommandGroup></Command><Command name="Document.ПриходнаяНакладная.StandardCommand.Create"><CommandGroup>ActionsPanelCreate</CommandGroup></Command><Command name="Document.РасходнаяНакладная.StandardCommand.Create"><CommandGroup>ActionsPanelCreate</CommandGroup></Command><Command name="Document.Сборка.StandardCommand.Create"><CommandGroup>ActionsPanelCreate</CommandGroup></Command><Command name="Report.ВедомостьПодразделения.StandardCommand.Open"><CommandGroup>ActionsPanelReports</CommandGroup></Command><Command name="Report.ПродажиОперативные.StandardCommand.Open"><CommandGroup>ActionsPanelReports</CommandGroup></Command></CommandsOrder><GroupsOrder><Group>NavigationPanelImportant</Group><Group>NavigationPanelOrdinary</Group><Group>NavigationPanelSeeAlso</Group><Group>ActionsPanelCreate</Group><Group>ActionsPanelReports</Group></GroupsOrder></CommandInterface>
