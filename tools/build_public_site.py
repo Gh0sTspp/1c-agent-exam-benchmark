@@ -8,7 +8,8 @@ import tempfile
 from pathlib import Path
 
 ROOT = Path(__file__).resolve().parents[1]
-PUBLIC = ('leaderboard.html', 'leaderboard.js', 'nav.js', 'style.css', 'community.json', 'penalty-cards.js', 'penalty-info.json')
+PUBLIC = ('leaderboard.html', 'leaderboard.js', 'nav.js', 'style.css', 'community.json',
+          'penalty-cards.js', 'penalty-info.json', 'source-viewer.js', 'api-cost.js')
 sys.path.insert(0, str(ROOT))
 
 
