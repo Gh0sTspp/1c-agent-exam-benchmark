@@ -65,6 +65,11 @@ def start(action, data, root=ROOT):
             result_id = require_visible_result(data['id'], root)
             if not (root / '.local/demo/jobs' / result_id / 'evaluation.json').is_file():
                 raise ValueError('Result has no completed evaluation')
+            from tools.publication_status import job_run_id, publication_index
+            status = read(root / '.local/demo/jobs' / result_id / 'status.json')
+            publication = publication_index(root)(job_run_id(root / '.local/demo/jobs' / result_id, status))
+            if publication['blocked']:
+                raise ValueError('Этот прогон уже опубликован, отправлен или статус его PR ещё проверяется')
         log = root / '.local/community/worker.log'
         log.parent.mkdir(parents=True, exist_ok=True)
         with log.open('ab') as stream:

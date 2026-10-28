@@ -323,7 +323,7 @@ function render() {
     if (r.author?.github) { const a = node('a', r.author.name || r.author.github); a.href = 'https://github.com/' + r.author.github; author.append(a); sub(author, '@' + r.author.github); }
     else author.append(node('span', r.author?.name || '—'));
     sub(author, r.date ? new Date(r.date).toLocaleDateString('ru-RU') : '');
-    sub(author, r.local ? 'не отправлен' : r.verification === 'repository_owner' ? 'проверено владельцем репозитория' : r.verification === 'repository_owner_incomplete' ? 'проверка владельца неполная' : r.verification === 'contributor_reported' ? 'заявлено участником' : r.verification);
+    sub(author, r.local ? (r.item.publication?.state === 'published' ? 'опубликован' : r.item.publication?.state === 'submitted' ? 'PR создан' : 'локальный результат') : r.verification === 'repository_owner' ? 'проверено владельцем репозитория' : r.verification === 'repository_owner_incomplete' ? 'проверка владельца неполная' : r.verification === 'contributor_reported' ? 'заявлено участником' : r.verification);
     const cellActions = node('td'), act = node('div', null, 'row-actions');
     cellActions.append(act);
     if (r.local && submit) { const box = node('div', null, 'actions'); submit(box, r.item, local.community, local.githubReady, load); act.append(box); }
@@ -335,7 +335,7 @@ function render() {
     return [tr];
   }));
   const mine = visible.filter(r => r.local).length;
-  $('summary').textContent = `${visible.length} из ${rows.length}` + (mine ? ` · ваших неотправленных: ${mine}` : '');
+  $('summary').textContent = `${visible.length} из ${rows.length}` + (mine ? ` · локальных: ${mine}` : '');
   $('empty').hidden = visible.length > 0;
   $('empty').textContent = rows.length ? 'Нет результатов с такими условиями.' : 'Пока нет результатов. Сделайте замер и отправьте его в рейтинг.';
 }

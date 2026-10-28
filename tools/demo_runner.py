@@ -151,6 +151,8 @@ def harness_options(root=ROOT):
 
 def history(root=ROOT):
     """Every local attempt, newest first, with its evaluation and submission state."""
+    from tools.publication_status import job_run_id, publication_index
+    publication = publication_index(root)
     items = []
     for job in sorted((root / '.local/demo/jobs').glob('demo-*'), reverse=True):
         if (root / '.local/community/deleted' / (job.name + '.json')).exists():
@@ -165,6 +167,10 @@ def history(root=ROOT):
                 'agent': status.get('agent', 'codex'), 'model': status.get('model'),
                 'started_unix': status['started_unix'], 'error': status.get('error'), 'evaluation': None,
                 'prepared': (root / '.local/community/prepared' / job.name / 'manifest.json').is_file(), 'pr_url': None}
+        try:
+            item['publication'] = publication(job_run_id(job, status))
+        except ValueError:
+            item['publication'] = {'state': 'unknown', 'blocked': True}
         pr = root / '.local/community/pr' / (job.name + '.json')
         if pr.is_file():
             item['pr_url'] = read(pr)['url']
