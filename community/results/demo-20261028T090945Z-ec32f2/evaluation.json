@@ -1,0 +1,461 @@
+{
+  "run_id": "demo-20261028T090945Z-ec32f2",
+  "created_at": "2026-10-28T11:25:24.860794+00:00",
+  "model": "gpt-6.1-terra",
+  "harness": "none",
+  "solve_seconds": 7200,
+  "platform": "8.3.27.2342",
+  "counts": {
+    "pass": 65
+  },
+  "rules": [
+    {
+      "id": "BU01",
+      "verdict": "pass",
+      "coverage": "selected_fixture",
+      "reason": null
+    },
+    {
+      "id": "BU04",
+      "verdict": "pass",
+      "coverage": "selected_fixture",
+      "reason": null
+    },
+    {
+      "id": "BU05",
+      "verdict": "pass",
+      "coverage": "selected_fixture",
+      "reason": null
+    },
+    {
+      "id": "BU16",
+      "verdict": "pass",
+      "coverage": "selected_fixture",
+      "reason": null
+    },
+    {
+      "id": "BU17",
+      "verdict": "pass",
+      "coverage": "selected_fixture",
+      "reason": null
+    },
+    {
+      "id": "BU02",
+      "verdict": "pass",
+      "coverage": "partial",
+      "reason": null
+    },
+    {
+      "id": "BU10",
+      "verdict": "pass",
+      "coverage": "selected_fixture",
+      "reason": null
+    },
+    {
+      "id": "BU12",
+      "verdict": "pass",
+      "coverage": "selected_fixture",
+      "reason": null
+    },
+    {
+      "id": "BU03",
+      "verdict": "pass",
+      "coverage": "selected_fixture",
+      "reason": null
+    },
+    {
+      "id": "BU06",
+      "verdict": "pass",
+      "coverage": "selected_fixture",
+      "reason": null
+    },
+    {
+      "id": "BU07",
+      "verdict": "pass",
+      "coverage": "selected_fixture",
+      "reason": null
+    },
+    {
+      "id": "BU08",
+      "verdict": "pass",
+      "coverage": "selected_fixture",
+      "reason": null
+    },
+    {
+      "id": "BU09",
+      "verdict": "pass",
+      "coverage": "selected_fixture",
+      "reason": null
+    },
+    {
+      "id": "BU11",
+      "verdict": "pass",
+      "coverage": "selected_fixture",
+      "reason": null
+    },
+    {
+      "id": "BU14",
+      "verdict": "pass",
+      "coverage": "selected_fixture",
+      "reason": null
+    },
+    {
+      "id": "BU15",
+      "verdict": "pass",
+      "coverage": "selected_fixture",
+      "reason": null
+    },
+    {
+      "id": "BU13",
+      "verdict": "pass",
+      "coverage": "selected_fixture",
+      "reason": null
+    },
+    {
+      "id": "OU15",
+      "verdict": "pass",
+      "coverage": "selected_fixture",
+      "reason": null
+    },
+    {
+      "id": "OU16",
+      "verdict": "pass",
+      "coverage": "selected_fixture",
+      "reason": null
+    },
+    {
+      "id": "OU17",
+      "verdict": "pass",
+      "coverage": "selected_fixture",
+      "reason": null
+    },
+    {
+      "id": "OU02",
+      "verdict": "pass",
+      "coverage": "selected_fixture",
+      "reason": null
+    },
+    {
+      "id": "OU18",
+      "verdict": "pass",
+      "coverage": "selected_fixture",
+      "reason": null
+    },
+    {
+      "id": "OU14",
+      "verdict": "pass",
+      "coverage": "selected_fixture",
+      "reason": null
+    },
+    {
+      "id": "OU01",
+      "verdict": "pass",
+      "coverage": "selected_fixture",
+      "reason": null
+    },
+    {
+      "id": "OU03",
+      "verdict": "pass",
+      "coverage": "history_and_periodicity",
+      "reason": null
+    },
+    {
+      "id": "OU05",
+      "verdict": "pass",
+      "coverage": "selected_fixture",
+      "reason": null
+    },
+    {
+      "id": "OU06",
+      "verdict": "pass",
+      "coverage": "no_violation_found",
+      "reason": null
+    },
+    {
+      "id": "OU07",
+      "verdict": "pass",
+      "coverage": "selected_fixture",
+      "reason": null
+    },
+    {
+      "id": "OU08",
+      "verdict": "pass",
+      "coverage": "history_and_periodicity",
+      "reason": null
+    },
+    {
+      "id": "OU09",
+      "verdict": "pass",
+      "coverage": "selected_fixture",
+      "reason": null
+    },
+    {
+      "id": "OU10",
+      "verdict": "pass",
+      "coverage": "selected_fixture",
+      "reason": null
+    },
+    {
+      "id": "OU11",
+      "verdict": "pass",
+      "coverage": "selected_fixture",
+      "reason": null
+    },
+    {
+      "id": "OU12",
+      "verdict": "pass",
+      "coverage": "selected_fixture",
+      "reason": null
+    },
+    {
+      "id": "OU13",
+      "verdict": "pass",
+      "coverage": "selected_fixture",
+      "reason": null
+    },
+    {
+      "id": "OU04",
+      "verdict": "pass",
+      "coverage": "selected_fixture",
+      "reason": null
+    },
+    {
+      "id": "OU19",
+      "verdict": "pass",
+      "coverage": "selected_fixture",
+      "reason": null
+    },
+    {
+      "id": "OU20",
+      "verdict": "pass",
+      "coverage": "selected_fixture",
+      "reason": null
+    },
+    {
+      "id": "OU21",
+      "verdict": "pass",
+      "coverage": "selected_fixture",
+      "reason": null
+    },
+    {
+      "id": "PR01",
+      "verdict": "pass",
+      "coverage": "selected_fixture",
+      "reason": null
+    },
+    {
+      "id": "PR02",
+      "verdict": "pass",
+      "coverage": "selected_fixture",
+      "reason": null
+    },
+    {
+      "id": "PR03",
+      "verdict": "pass",
+      "coverage": "selected_fixture",
+      "reason": null
+    },
+    {
+      "id": "PR04",
+      "verdict": "pass",
+      "coverage": "selected_fixture",
+      "reason": null
+    },
+    {
+      "id": "PR05",
+      "verdict": "pass",
+      "coverage": "selected_fixture",
+      "reason": null
+    },
+    {
+      "id": "PR06",
+      "verdict": "pass",
+      "coverage": "selected_fixture",
+      "reason": null
+    },
+    {
+      "id": "PR07",
+      "verdict": "pass",
+      "coverage": "selected_fixture",
+      "reason": null
+    },
+    {
+      "id": "PR08",
+      "verdict": "pass",
+      "coverage": "selected_fixture",
+      "reason": null
+    },
+    {
+      "id": "PR09",
+      "verdict": "pass",
+      "coverage": "selected_fixture",
+      "reason": null
+    },
+    {
+      "id": "PR10",
+      "verdict": "pass",
+      "coverage": "selected_fixture",
+      "reason": null
+    },
+    {
+      "id": "PR11",
+      "verdict": "pass",
+      "coverage": "selected_fixture",
+      "reason": null
+    },
+    {
+      "id": "PR12",
+      "verdict": "pass",
+      "coverage": "selected_fixture",
+      "reason": null
+    },
+    {
+      "id": "PR13",
+      "verdict": "pass",
+      "coverage": "selected_fixture",
+      "reason": null
+    },
+    {
+      "id": "PR14",
+      "verdict": "pass",
+      "coverage": "no_violation_found",
+      "reason": null
+    },
+    {
+      "id": "PR15",
+      "verdict": "pass",
+      "coverage": "selected_fixture",
+      "reason": null
+    },
+    {
+      "id": "PR16",
+      "verdict": "pass",
+      "coverage": "selected_fixture",
+      "reason": null
+    },
+    {
+      "id": "PR17",
+      "verdict": "pass",
+      "coverage": "selected_fixture",
+      "reason": null
+    },
+    {
+      "id": "PR18",
+      "verdict": "pass",
+      "coverage": "selected_fixture",
+      "reason": null
+    },
+    {
+      "id": "PR19",
+      "verdict": "pass",
+      "coverage": "selected_fixture",
+      "reason": null
+    },
+    {
+      "id": "F01",
+      "verdict": "pass",
+      "coverage": "selected_fixture",
+      "reason": null
+    },
+    {
+      "id": "F02",
+      "verdict": "pass",
+      "coverage": "selected_fixture",
+      "reason": null
+    },
+    {
+      "id": "F03",
+      "verdict": "pass",
+      "coverage": "selected_fixture",
+      "reason": null
+    },
+    {
+      "id": "F04",
+      "verdict": "pass",
+      "coverage": "selected_fixture",
+      "reason": null
+    },
+    {
+      "id": "F05",
+      "verdict": "pass",
+      "coverage": "selected_fixture",
+      "reason": null
+    },
+    {
+      "id": "G01",
+      "verdict": "pass",
+      "coverage": "static_sources",
+      "reason": null
+    },
+    {
+      "id": "G02",
+      "verdict": "pass",
+      "coverage": "static_sources",
+      "reason": null
+    },
+    {
+      "id": "G03",
+      "verdict": "pass",
+      "coverage": "static_sources",
+      "reason": null
+    }
+  ],
+  "charges": [
+    {
+      "id": "F1C-GEN15",
+      "points": "0.5",
+      "reason": "Documents/НачислениеЗарплаты/Ext/ObjectModule.bsl:68 — РегистрРасчета.ОсновныеНачисления: отбор по РегистраторИсточника, индексы таблицы начинаются с ПериодДействия, ПериодРегистрации, Регистратор, Сотрудник"
+    },
+    {
+      "id": "F1C-GEN15",
+      "points": "0.5",
+      "reason": "Reports/ВедомостьПодразделения/Ext/ManagerModule.bsl:2 — РегистрНакопления.ОстаткиНоменклатуры.ОстаткиИОбороты: отбор по Подразделение, Свойство, индексы таблицы начинаются с Номенклатура"
+    },
+    {
+      "id": "F1C-GEN15",
+      "points": "0.5",
+      "reason": "Reports/Премии/Ext/ManagerModule.bsl:3 — РегистрРасчета.ОсновныеНачисления: отбор по ВидРасчета, ПериодДействияНачало, индексы таблицы начинаются с ПериодДействия, ПериодРегистрации, Регистратор, Сотрудник"
+    },
+    {
+      "id": "F1C-PR14",
+      "points": "0.5",
+      "reason": "после расчёта набор с периодом действия перезаписывается целиком, с пересчётом фактического периода действия (нужно Записать(, Истина)): Documents/НачислениеЗарплаты/Ext/ObjectModule.bsl:93 Движения.ОсновныеНачисления.Записать(); Documents/НачислениеЗарплаты/Ext/ObjectModule.bsl:133 Движения.ОсновныеНачисления.Записать()"
+    },
+    {
+      "id": "F1C-GEN28",
+      "points": "1.0",
+      "reason": "оперативное проведение разрешено у документов с движениями по регистрам расчёта: НачислениеЗарплаты"
+    },
+    {
+      "id": "F1C-GEN21",
+      "points": "2.0",
+      "reason": "данные графика без отбора по регистратору: Documents/НачислениеЗарплаты/Ext/ObjectModule.bsl:98"
+    },
+    {
+      "id": "F1C-GEN01",
+      "points": "0.5",
+      "reason": "расчёт только в модулях объектов: Documents/НачислениеЗарплаты/Ext/ObjectModule.bsl"
+    },
+    {
+      "id": "F1C-GEN01",
+      "points": "0.5",
+      "reason": "разыменование поля составного типа без ВЫРАЗИТЬ: Documents/РасходнаяНакладная/Ext/ObjectModule.bsl: Остатки.Партия.МоментВремени; Documents/Сборка/Ext/ObjectModule.bsl: Остатки.Партия.МоментВремени"
+    }
+  ],
+  "score_upper_bound": "-1.0",
+  "score": null,
+  "grade": "unsatisfactory",
+  "deductions": "6.0",
+  "not_assessed": 13,
+  "gates": {
+    "starter_origin": "passed",
+    "load": "loaded",
+    "clients": "compiles",
+    "demo_data": "present"
+  },
+  "infrastructure_errors": false,
+  "comparison_eligible": false,
+  "binding_compatibility": null,
+  "evaluation_sha256": "aa847419f36394bbf0f30a46cb7d5262c43e3d0b4fc5bda5776cd2da46a13400",
+  "downloads": []
+}

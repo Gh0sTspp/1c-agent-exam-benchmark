@@ -1,0 +1,21 @@
+<?xml version='1.0' encoding='UTF-8'?>
+<PredefinedData xmlns="http://v8.1c.ru/8.3/xcf/predef" xmlns:v8="http://v8.1c.ru/8.1/data/core" xmlns:xr="http://v8.1c.ru/8.3/xcf/readable" xmlns:xs="http://www.w3.org/2001/XMLSchema" xmlns:xsi="http://www.w3.org/2001/XMLSchema-instance" xsi:type="CalculationTypePredefinedItems" version="2.20">
+	<Item id="1d20004f-c1f4-4f2d-84dd-3f6dbe2c2538">
+		<Name>Оклад</Name>
+		<Code>1</Code>
+		<Description>Оплата по тарифу</Description>
+		<ActionPeriodIsBase>false</ActionPeriodIsBase>
+	<Displaced><CalculationType>ChartOfCalculationTypes.ОсновныеНачисления.Командировка</CalculationType></Displaced></Item>
+<Item id="0390667d-a458-459a-9a9c-70481e77b80a">
+		<Name>Премия</Name>
+		<Code>2</Code>
+		<Description>Премия</Description>
+		<ActionPeriodIsBase>false</ActionPeriodIsBase>
+	<Base><CalculationType>ChartOfCalculationTypes.ОсновныеНачисления.Оклад</CalculationType></Base><Displaced><CalculationType>ChartOfCalculationTypes.ОсновныеНачисления.Командировка</CalculationType></Displaced></Item>
+<Item id="2efab15a-77a9-4779-840e-a48d9454080d">
+		<Name>Командировка</Name>
+		<Code>3</Code>
+		<Description>Командировка</Description>
+		<ActionPeriodIsBase>false</ActionPeriodIsBase>
+	<Base><CalculationType>ChartOfCalculationTypes.ОсновныеНачисления.Оклад</CalculationType><CalculationType>ChartOfCalculationTypes.ОсновныеНачисления.Премия</CalculationType><CalculationType>ChartOfCalculationTypes.ОсновныеНачисления.Командировка</CalculationType></Base></Item>
+</PredefinedData>

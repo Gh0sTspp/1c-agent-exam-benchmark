@@ -1,0 +1,46 @@
+{
+  "client": "codex",
+  "model": "gpt-6.1-terra",
+  "client_version": "0.163.0-alpha.10.2",
+  "reasoning_effort": "medium",
+  "harness": "none",
+  "billing_channel": "subscription",
+  "solve_timeout_seconds": 7200,
+  "time_series": null,
+  "delegation": "native_disabled",
+  "network_profile": "open-book_shell",
+  "deadline_disclosed": true,
+  "statement_sha256": "8a6ccb3e673826d1f8220fda53eb310e3ec18c136d87ce8f4cebb2a08614e7e5",
+  "starter_dt_sha256": "f40d084818b0d1cfe503fc7653a6a13f1a8e47fcd1688dad6245b12744eb4638",
+  "profile_sha256": "7ccb3ce209cd8fe3586084914b2e201edf921d75e28b4d7415276587424765dd",
+  "execution_policy_sha256": "fd2cd554bb1eff56e5a09f817ecf5eaa2f4d29851499d98c9a0a1675fd07aa4b",
+  "calibration_sha256": "96b94638956dde7909db7805fc339f2017c3f8c7e98c677b3100efb5f84960a8",
+  "started_at": "2026-10-28T09:10:03.621346+00:00",
+  "timing": {
+    "prepare_ms": 14915,
+    "solve_ms": 7200089,
+    "grade_ms": null
+  },
+  "original_submission_valid": true,
+  "model_provenance": "requested_only",
+  "tokens": {
+    "input": 196423894,
+    "cached_input": 195618176,
+    "cache_creation_input": null,
+    "fresh_input": 805718,
+    "output": 267686,
+    "reasoning_output": 74984,
+    "total": 196691580,
+    "coverage": "last_reported_native_session_counter; unreported in-flight request excluded"
+  },
+  "tools": {
+    "mcp_calls": 0,
+    "unica_calls": 0,
+    "failed_calls": 0
+  },
+  "process": {
+    "status": "timeout",
+    "exit_code": 1,
+    "stop_confirmed": true
+  }
+}
