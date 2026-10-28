@@ -2,6 +2,7 @@
 // Not a bill: counters do not establish request-level context tiers, cache TTL or service tier.
 export const API_PRICES = {
   'gpt-6.1-sol': {input: 2, cached: 0.10, output: 10, provider: 'OpenAI', source: 'https://developers.openai.com/api/docs/pricing'},
+  'gpt-6.1-terra': {input: 1, cached: 0.05, output: 5, provider: 'OpenAI', source: 'https://developers.openai.com/api/docs/models/gpt-6.1-terra'},
   'gpt-6-astra': {input: 10, cached: 1, output: 50, provider: 'OpenAI', source: 'https://developers.openai.com/api/docs/pricing'},
   'claude-opus-5-5': {input: 4, cached: 0.20, cacheWrite: 5, output: 20, provider: 'Anthropic', source: 'https://platform.claude.com/docs/en/about-claude/pricing'},
   // Cursor's high is the reasoning level, not the separately priced Grok 4.7 Fast.
