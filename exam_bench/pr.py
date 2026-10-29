@@ -247,6 +247,22 @@ def seniority_values(start, unit):
     return months if unit == 'months' else months // 12
 
 
+def report_seniority_range(start, period, unit):
+    """Conservative numeric bounds for the reported month, including whole units.
+
+    The ticket does not fix the date in the month or rounding convention. The
+    output unit is explicitly declared for the report, not inferred from the
+    separate unit of the bonus scale.
+    """
+    if unit not in ('years', 'months', 'days'):
+        raise ValueError('Report seniority unit is not declared or supported')
+    divisor = {'years': Decimal('365.25'), 'months': Decimal('30.4375'), 'days': Decimal(1)}[unit]
+    lower = Decimal((period - start).days) / divisor
+    upper = Decimal((month_end(period) - start).days) / divisor
+    return (lower.to_integral_value(rounding='ROUND_FLOOR'),
+            upper.to_integral_value(rounding='ROUND_CEILING'))
+
+
 def code(binding, case, helpers):
     pr = binding['pr']
     obj, f = pr['objects'], pr['fields']
@@ -296,12 +312,12 @@ def code(binding, case, helpers):
                 s += f'Ошибки.Вставить({q(step[1])}, "not_declared");\n'
                 continue
             reports['pr_bonus'] = report
-            s += f'Попытка Снимки.Вставить({q(step[1])}, Report_pr_bonus({bsl_date(step[2])}, КонецДня({bsl_date(month_end(step[2]))}))); Исключение Ошибки.Вставить({q(step[1])}, ОписаниеОшибки()); КонецПопытки;\n'
+            s += f'Попытка СхемаОтчета = Новый Структура; Снимки.Вставить({q(step[1])}, Report_pr_bonus({bsl_date(step[2])}, КонецДня({bsl_date(month_end(step[2]))}), СхемаОтчета)); Снимки.Вставить({q(step[1] + "_schema")}, СхемаОтчета); Исключение Ошибки.Вставить({q(step[1])}, ОписаниеОшибки()); КонецПопытки;\n'
     s += 'Попытка Снимки.Вставить("results", Results()); Исключение Ошибки.Вставить("results", ОписаниеОшибки()); КонецПопытки;\n'
     s += 'Возврат Новый Структура("snapshots,posted,errors,autofilled", Снимки, Проведено, Ошибки, Автозаполнено);\nКонецФункции\n'
-    from .grader import report_code
+    from .report_observability import report_code_with_schema
     for role, report in reports.items():
-        s += report_code(report, 'Report_' + role)
+        s += report_code_with_schema(report, 'Report_' + role)
     return s + results_code(pr) + helpers
 
 
@@ -476,13 +492,14 @@ def compare(observations, binding, static=None):
 
     def report_ok():
         o = observations['pr_bonus']
-        if o['errors'].get('report_feb') == 'not_declared':
-            raise KeyError('Report not declared in binding.reports')
-        if 'report_feb' in o['errors']:
-            why.append('Report pr_bonus failed: ' + str(o['errors']['report_feb'])[:200])
-            return False
-        rows = o['snapshots']['report_feb']
+        from .report_observability import require_report_fields
+        report = (binding.get('reports') or {}).get('pr_bonus')
+        fields = report.get('fields') if report else None
+        rows = o['snapshots'].get('report_feb')
+        required = ['employee', 'amount', 'percent']
+        require_report_fields(fields, required, rows, o['snapshots'].get('report_feb_schema'), o['errors'].get('report_feb'))
         ok = True
+        matches = {}
         for head, dept in (('H', 'A'), ('G', 'B'), ('K', 'C')):
             amount = expect('pr_bonus', head, dept, 'bonus', feb)
             pct = bonus_percent(CASES['pr_bonus'], head, feb)
@@ -490,13 +507,30 @@ def compare(observations, binding, static=None):
 
             def num(v):
                 try:
-                    return Decimal(str(v)) if v not in (None, '') else Decimal(0)
+                    return Decimal(str(v)) if v not in (None, '') else None
                 except Exception:
-                    return Decimal(-1)
-            if not any(abs(num(r.get('amount')) - amount) <= TOLERANCE and ('percent' not in r or num(r.get('percent')) == pct) for r in mine):
+                    return None
+            matches[head] = [r for r in mine if num(r.get('amount')) is not None and abs(num(r.get('amount')) - amount) <= TOLERANCE and ('percent' not in required or num(r.get('percent')) == pct)]
+            if not matches[head]:
                 why.append('report_feb %s: expected amount %s, percent %s; rows %s' % (head, amount.quantize(Decimal('0.01')), pct, mine[:3]))
                 ok = False
-        return ok
+        if not ok:
+            return False
+        require_report_fields(fields, ['seniority'], rows, o['snapshots'].get('report_feb_schema'), o['errors'].get('report_feb'))
+        unit = report.get('seniority_unit')
+        if unit not in ('years', 'months', 'days'):
+            raise ValueError('Report seniority unit is not declared or supported')
+        for head, _ in (('H', 'A'), ('G', 'B'), ('K', 'C')):
+            lo, hi = report_seniority_range(CASES['pr_bonus']['employees'][head], feb, unit)
+            values = [r.get('seniority') for r in matches[head]]
+            parsed = [num(value) for value in values]
+            if any(v is not None and v.is_finite() and lo <= v <= hi for v in parsed):
+                continue
+            if any(value not in (None, '') and (number is None or not number.is_finite()) for value, number in zip(values, parsed)):
+                raise ValueError('Report seniority value is not a supported number')
+            why.append('report_feb %s: seniority outside %s–%s %s' % (head, lo, hi, unit))
+            return False
+        return True
 
     checks = {
         'PR01': lambda: displaced('pr_trip'),

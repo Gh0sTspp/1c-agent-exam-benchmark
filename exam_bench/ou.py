@@ -123,6 +123,9 @@ CASES = {
                             ('report', 'statement', 'ou_statement', '2025-01-01', '2025-01-31', 'D'), ('report', 'sales', 'ou_sales', '2025-01-01', '2025-01-31', None)]},
 }
 
+from .report_query_checks import CASES as REPORT_QUERY_CASES
+CASES.update(REPORT_QUERY_CASES)
+
 RULES = {'OU02': 'policies of three departments in one base', 'OU14': 'sale rows carry department, block or peripheral and quantity',
          'OU15': 'FIFO expense and remainder', 'OU16': 'LIFO expense and remainder', 'OU17': 'average expense and remainder',
          'OU18': 'one document with rows of three departments gives three independent results',
@@ -170,9 +173,9 @@ def code(binding, case, helpers):
             reports[step[2]] = report
         s += step_code(step, ou, obj, f)
     s += 'Возврат Новый Структура("snapshots,posted,errors,autofilled", Снимки, Проведено, Ошибки, Автозаполнено);\nКонецФункции\n'
-    from .grader import report_code
+    from .report_observability import report_code_with_schema
     for role, report in reports.items():
-        s += report_code(report, 'Report_' + role, department=role == 'ou_statement')
+        s += report_code_with_schema(report, 'Report_' + role, department=role == 'ou_statement')
     if 'characteristics' in obj and 'property_values' in obj:
         s += ou_characteristic_code(obj['characteristics'], obj['property_values'], f['property_values']['value'])
     s += snapshot_code(obj, f) + helpers
@@ -381,7 +384,7 @@ def step_code(step, ou, obj, f):
         _, label, role, start, end, dept = step
         y, m, dd = end.split('-')
         args = f'{date(start).replace(",12,0,0)", ",0,0,0)")}, Дата({int(y)},{int(m)},{int(dd)},23,59,59)' + (f', Подр[{q(dept)}]' if dept else '')
-        return f'Попытка Снимки.Вставить({q(label)}, Report_{role}({args})); Исключение Ошибки.Вставить({q(label)}, ОписаниеОшибки()); КонецПопытки;\n'
+        return f'Попытка СхемаОтчета = Новый Структура; Снимки.Вставить({q(label)}, Report_{role}({args}, СхемаОтчета)); Снимки.Вставить({q(label + "_schema")}, СхемаОтчета); Исключение Ошибки.Вставить({q(label)}, ОписаниеОшибки()); КонецПопытки;\n'
     raise ValueError('Unknown step ' + kind)
 
 
@@ -465,20 +468,21 @@ def compare(observations, binding, static=None):
 
     def num(v):
         try:
-            return d(v) if v not in (None, '') else Decimal(0)
+            return d(v) if v not in (None, '') else None
         except Exception:
             return None
 
     def report_row(label, item, expected, characteristic=None):
         """Some row of the report for the item (and characteristic value) has the expected values; tree totals may repeat rows."""
         o = observations['ou_report']
-        # Not declared: the stand cannot observe (inconclusive). Declared but failing: the solution's report is broken (fail).
-        if o['errors'].get(label) == 'not_declared':
-            raise KeyError('Report not declared in binding.reports')
-        if label in o['errors']:
-            why.append('Report %s failed: %s' % (label, str(o['errors'][label])[:200]))
-            return False
-        for r in o['snapshots'][label]:
+        from .report_observability import require_report_fields
+        role = 'ou_statement' if label == 'statement' else 'ou_sales'
+        report = (binding.get('reports') or {}).get(role)
+        fields = report.get('fields') if report else None
+        rows = o['snapshots'].get(label)
+        required = ['item', *expected] + (['characteristic'] if characteristic is not None else [])
+        require_report_fields(fields, required, rows, o['snapshots'].get(label + '_schema'), o['errors'].get(label))
+        for r in rows:
             if str(r.get('item') or '') != 'BENCH_' + item:
                 continue
             if characteristic is not None and characteristic not in str(r.get('characteristic') or ''):

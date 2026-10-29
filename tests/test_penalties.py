@@ -53,6 +53,40 @@ class Penalties(unittest.TestCase):
         self.assertEqual(sorted(f['defect_id'] for f in result['findings']), ['requirement.BU03', 'requirement.BU08'])
         self.assertEqual(result['score']['deductions'], '1.0')  # 2 x 0.5, the minimum of М4.1
 
+    def test_wrong_report_data_is_not_evidence_of_wrong_report_form(self):
+        self.binding.update(ou={'objects': {}}, pr={'objects': {}})
+        for requirement in ('OU19', 'OU20', 'OU21', 'BU16', 'BU17', 'PR19'):
+            with self.subTest(requirement=requirement):
+                section = requirement[:2]
+                rules = [{'id': r['id'], 'verdict': 'fail' if r['id'] == requirement else 'pass',
+                          'reason': 'ожидаемое и фактическое значение различаются' if r['id'] == requirement else None}
+                         for r in self.requirements if r['section'] == section]
+                result = self.run_with(rules)
+                findings = [(f['penalty_id'], f['defect_id']) for f in result['findings']]
+                self.assertIn(('F1C-GEN01', 'requirement.' + requirement), findings)
+                self.assertNotIn('F1C-GEN03', [f['penalty_id'] for f in result['findings']])
+                self.assertEqual(result['statuses']['F1C-GEN03']['status'], 'not_assessed')
+
+    def test_report_binding_errors_and_inconclusive_verdict_do_not_charge(self):
+        for reason in ('Required observations unavailable: Report observation unavailable: binding_unavailable',
+                       'Required observations unavailable: Report field amount: mapped_column_absent',
+                       'Required observations unavailable: not_declared'):
+            with self.subTest(reason=reason):
+                rules = self.bu(BU16='inconclusive')
+                next(r for r in rules if r['id'] == 'BU16')['reason'] = reason
+                result = self.run_with(rules)
+                self.assertFalse(any(f['defect_id'] == 'requirement.BU16' for f in result['findings']))
+                self.assertFalse(any(f['penalty_id'] == 'F1C-GEN03' for f in result['findings']))
+
+    def test_report_runtime_error_is_still_deduplicated_by_root_cause(self):
+        error = ('{ОбщийМодуль.BenchmarkObserver.Модуль(41)}: Ошибка: '
+                 '{Отчет.Продажи.МодульОбъекта(64)}: Ошибка выполнения запроса')
+        result = self.run_with(self.bu(BU16='fail', BU17='fail'), {'report': {'report_error': error}})
+        findings = [(f['penalty_id'], f['defect_id']) for f in result['findings']]
+        self.assertEqual(len(findings), 1)
+        self.assertEqual(findings[0][0], 'F1C-GEN12')
+        self.assertTrue(findings[0][1].startswith('code.'))
+
     def test_one_code_error_breaking_many_requirements_is_one_defect(self):
         error = ("{ОбщийМодуль.BenchmarkObserver.Модуль(41)}: Error calling context method (Записать): Error running processor - 'ОбработкаПроведения': "
                  "{ОбщийМодуль.УчетСервер.Модуль(64)}: Error calling context method (Выполнить): {(1, 114)}: Wrong parameters\nВЫБРАТЬ ...")

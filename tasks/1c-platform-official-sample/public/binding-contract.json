@@ -75,6 +75,7 @@
       },
       "module": "object | manager (kind=function)",
       "function": "<exported function (start, end) returning a value table or tree; ou_statement: (start, end, department)>",
+      "seniority_unit": "years | months | days (optional; pr_bonus report seniority column only)",
       "fields": {
         "<field role>": "<column name in the report result>"
       }

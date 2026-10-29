@@ -207,9 +207,10 @@ def assess(rules, src, binding, requirements, starter, catalogue, policy, gates=
             if cause:
                 causes.setdefault(cause, []).append(r['id'])
                 continue
-            report = REPORT_REQUIREMENTS.get(r['id'])
-            why = ('отчёт не соответствует заданию: ' if report else 'не выполнено требование: ') + r['id'] + (' — ' + r['reason'] if r.get('reason') else '')
-            find('F1C-GEN03' if report else 'F1C-GEN01', 'requirement.' + r['id'], why)
+            # A wrong report value proves a failed ticket requirement, not that the report's *form* differs from
+            # the ticket (М4.3). The latter needs independent evidence of its columns, grouping or layout.
+            why = 'не выполнено требование: ' + r['id'] + (' — ' + r['reason'] if r.get('reason') else '')
+            find('F1C-GEN01', 'requirement.' + r['id'], why)
             # The same defect also proves the specific items; the charge stays the smallest applicable (A02, v4).
             for penalty in REQUIREMENT_PENALTIES.get(r['id'], ()):
                 find(penalty, 'requirement.' + r['id'], why)

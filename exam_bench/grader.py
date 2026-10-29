@@ -10,6 +10,9 @@ from . import ou, pr, forms, interface, queries
 from .workspaces import case_workspace
 
 PROFILE={'schema_version':1,'id':'technical-v8','rules':['BU01','BU02','BU03','BU04','BU05','BU06','BU07','BU08','BU09','BU10','BU11','BU12','BU13','BU14','BU15','BU16','BU17','OU01','OU02','OU03','OU05','OU06','OU07','OU08','OU09','OU10','OU11','OU12','OU13','OU14','OU15','OU16','OU17','OU18','OU04','OU19','OU20','OU21','PR01','PR02','PR03','PR04','PR05','PR06','PR07','PR08','PR09','PR10','PR11','PR12','PR13','PR14','PR15','PR16','PR17','PR18','PR19','F01','F02','F03','F04','F05','G01','G02','G03'],'whole_ticket_verdict':False,'ui_coverage':False,'rule_coverage':{'BU02':'posting_cost_and_balance_only; report and other readers not checked','BU10':'runtime refusal and all financial-register snapshots','BU12':'shared analog C, posting and nonnegative quantity','BU13':'company mean and warehouse quantities','BU03':'chain A~B~C without a direct link','BU06':'warehouse balances and refusal by warehouse stock','BU07':'receipt postings Dt goods Ct suppliers with quantity, amount and analytics','BU08':'own item before analogs','BU09':'automatic substitution by a shared analog','BU11':'ascending string order of articles (Q05)','BU14':'cost posting Dt profit Ct goods with analytics','BU15':'revenue posting Dt customers Ct profit at sale price','BU01':'manual operation accepts an arbitrary correspondence (customers/profit)','BU04':'articles entered by the user are stored unchanged','BU05':'warehouse is a header attribute of receipt and sale, not a table column','BU16':'declared report for January: requested item with sold item rows, February excluded, document line kept','BU17':'report profit = revenue - cost on each row'},'adversarial_cheating_resistance':False,'startup_hooks':'replaced only in disposable observer copy','cases':['manual','average','oversell','dup_split','dup_over','shared_short','shared_enough','chain','own_first','order','report','ou_policies','ou_assembly','ou_assembly_split','ou_history','ou_report','pr_tariff','pr_trip','pr_backdate','pr_bonus','pr_zero','forms','query_texts']}
+PROFILE['cases'].extend(['report_balance_contrast', 'report_sales_cardinality'])
+PROFILE['rule_coverage'].update({'OU19': 'department and period; contrasting opening balances and unmatched details',
+                                 'OU21': 'sales report values and repeated sale lines'})
 PROFILE['rule_coverage'].update(ou.RULES);PROFILE['rule_coverage'].update(pr.RULES);PROFILE['rule_coverage'].update(forms.RULES);PROFILE['rule_coverage'].update(interface.RULES)
 CASES={
  'manual':{'receipts':[['A','W1',2,60]],'manual':['A','W1',2,20],'sale':[['A',1,40]],'analogs':[],'free_manual':True},
@@ -108,13 +111,24 @@ HELPERS_CORE='''Функция SubcontoValue(Стр, Сторона, Вид)
 REPORT_HELPERS='''Процедура ДобавитьСтроки(Строки, Колонки, Карта, Массив, Родитель)
  Для Каждого Стр Из Строки Цикл
   Р = Новый Структура;
+  Унаследовано = Новый Массив;
   Для Каждого КЗ Из Карта Цикл
    Значение = Неопределено;
    Если Колонки.Найти(КЗ.Значение) <> Неопределено Тогда Значение = ЗначениеJSON(Стр[КЗ.Значение]); КонецЕсли;
    // Grouping values of a parent tree row apply to its nested rows (e.g. manufacturer -> item).
-   Если (Значение = Неопределено Или Значение = "") И Родитель <> Неопределено И Родитель.Свойство(КЗ.Ключ) Тогда Значение = Родитель[КЗ.Ключ]; КонецЕсли;
+   Если (Значение = Неопределено Или Значение = "") И Родитель <> Неопределено И Родитель.Свойство(КЗ.Ключ) Тогда Значение = Родитель[КЗ.Ключ]; Унаследовано.Добавить(КЗ.Ключ); КонецЕсли;
    Р.Вставить(КЗ.Ключ, Значение);
   КонецЦикла;
+  Лист = Истина;
+  Если ТипЗнч(Стр) = Тип("СтрокаДереваЗначений") Тогда Лист = Стр.Строки.Количество() = 0; КонецЕсли;
+  ПустаяСтрока = Истина;
+  Для Каждого Колонка Из Колонки Цикл
+   ФизическоеЗначение = Стр[Колонка.Имя];
+   Если Не (ФизическоеЗначение = NULL Или ФизическоеЗначение = Неопределено) Тогда ПустаяСтрока = Ложь; Прервать; КонецЕсли;
+  КонецЦикла;
+  Р.Вставить("__leaf", Лист);
+  Р.Вставить("__inherited", Унаследовано);
+  Р.Вставить("__empty", ПустаяСтрока);
   Массив.Добавить(Р);
   Если ТипЗнч(Стр) = Тип("СтрокаДереваЗначений") Тогда ДобавитьСтроки(Стр.Строки, Колонки, Карта, Массив, Р); КонецЕсли;
  КонецЦикла;
@@ -227,11 +241,13 @@ def code(binding,case):
         s+='Исключение Результат.Вставить("later_error", ОписаниеОшибки()); КонецПопытки;\n'
     if case.get('report'):
         if (b.get('reports') or {}).get(case['report']):
-            s+='Попытка Результат.Вставить("report_rows", ReportRows(Дата(2025,1,1), КонецДня(Дата(2025,1,31)))); Исключение Результат.Вставить("report_error", ОписаниеОшибки()); КонецПопытки;\n'
+            s+='Попытка СхемаОтчета = Новый Структура; Результат.Вставить("report_rows", ReportRows(Дата(2025,1,1), КонецДня(Дата(2025,1,31)), СхемаОтчета)); Результат.Вставить("report_schema", СхемаОтчета); Исключение Результат.Вставить("report_error", ОписаниеОшибки()); КонецПопытки;\n'
         else:
             s+='Результат.Вставить("report_error", "not_declared");\n'
     s+='Возврат Результат;\nКонецФункции\n'
-    if case.get('report') and (b.get('reports') or {}).get(case['report']):s+=report_code(b['reports'][case['report']])
+    if case.get('report') and (b.get('reports') or {}).get(case['report']):
+        from .report_observability import report_code_with_schema
+        s+=report_code_with_schema(b['reports'][case['report']])
     # Subconto values and kinds (СубконтоДтN, ВидСубконтоДтN) exist only in the virtual table of movements with subconto.
     table='РегистрБухгалтерии.'+obj['ledger']+('.ДвиженияССубконто' if any('.' in led[k] for k in ('item_debit','item_credit','warehouse_debit','warehouse_credit')) else '')
     s+='Функция Snapshot()\nЗапрос = Новый Запрос('+quoted('ВЫБРАТЬ * ИЗ '+table+' УПОРЯДОЧИТЬ ПО Регистратор, НомерСтроки')+'); Таблица = Запрос.Выполнить().Выгрузить(); Массив = Новый Массив;\nДля Каждого Стр Из Таблица Цикл\nР = Новый Структура;\n'
@@ -274,19 +290,36 @@ def compare(observations,binding,static=None):
     def revenue_ok(x):
         rows=[r for r in new_rows(x) if r['debit']==acc['customers']]
         return bool(rows) and all(r['credit']==acc['profit'] for r in rows) and sum((d(r['amount']) for r in rows),Decimal(0))==40
-    def report_rows(x):
-        # Not declared: the stand cannot observe (inconclusive). Declared but failing: the solution's report is broken (fail).
-        if x.get('report_error')=='not_declared':raise KeyError('Report not declared in binding.reports')
-        if x.get('report_error'):return None
-        return [r for r in x['report_rows'] if r.get('item')=='BENCH_A' and r.get('sold') not in (None,'')]
+    def report_rows(x, required):
+        from .report_observability import require_report_fields
+        report=(binding.get('reports') or {}).get('bu_sales')
+        fields=report.get('fields') if report else None
+        rows=x.get('report_rows')
+        error=x.get('report_error')
+        if error or not isinstance(rows,list) or not all(isinstance(r,dict) for r in rows):
+            require_report_fields(fields,required,rows,x.get('report_schema'),error)
+        # A DCS tree includes intermediate totals alongside its detail rows.
+        # Older snapshots without the marker cannot reliably distinguish them.
+        if any(not isinstance(r.get('__leaf'),bool) for r in rows):
+            raise ValueError('Report detail rows cannot be distinguished from grouping totals')
+        leaves=[r for r in rows if r['__leaf']]
+        require_report_fields(fields,required,leaves,x.get('report_schema'),error)
+        selected=[r for r in leaves if r.get('item')=='BENCH_A' and r.get('sold') not in (None,'')]
+        for row in selected:
+            inherited=row.get('__inherited')
+            if not isinstance(inherited,list):
+                raise ValueError('Report row inheritance information unavailable')
+            if set(required).difference(('item','sold')).intersection(inherited):
+                raise ValueError('Report detail values may be inherited from a group total')
+        return selected
     def report_ok(x):
-        found=report_rows(x)
-        if found is None:return False
+        found=report_rows(x,['item','sold','quantity','cost','revenue'])
+        if any(r.get(k) in (None,'') for r in found for k in ('quantity','cost','revenue')):return False
         rows={(r['sold'],d(r['quantity']),d(r['cost']),d(r['revenue'])) for r in found}
         return x['posted'] and rows=={('BENCH_A',d(1),d(10),d(40)),('BENCH_C',d(1),d(20),d(40))} and x['sale_lines']==['BENCH_A']
     def profit_ok(x):
-        rows=report_rows(x)
-        return bool(rows) and all(r.get('profit') is not None and d(r['profit'])==d(r['revenue'])-d(r['cost']) for r in rows)
+        rows=report_rows(x,['item','sold','profit','revenue','cost'])
+        return bool(rows) and all(all(r.get(k) not in (None,'') for k in ('profit','revenue','cost')) and d(r['profit'])==d(r['revenue'])-d(r['cost']) for r in rows)
     def free_ok(x):
         return x['free_written'] and any(r['debit']==acc['customers'] and r['credit']==acc['profit'] and d(r['amount'])==5 for r in x['after_free'])
     checks={
@@ -368,6 +401,8 @@ def grade(source,binding,starter,binary,evidence,selected_cases=None):
     for module,reason in sections.values():
         if reason is None:results+=module.compare(observations,binding,module.static_signs(source,binding))
         else:results+=[{'id':r,'verdict':'inconclusive','reason':reason,'coverage':'selected_fixture','assertion_id':r+'.selected_fixture'} for r in module.RULES]
+    from .report_query_checks import integrate as integrate_report_query_checks
+    results=integrate_report_query_checks(results,observations,binding,selected_cases)
     report={'profile':PROFILE,'source_manifest':original,'observations':observations,'errors':errors,'rules':results,'whole_ticket':'not_evaluated','ignored_binding_sections':ignored_sections,'expanded_binding_names':expanded_names,'status':'partial_pass' if all(r['verdict']=='pass' for r in results) else 'partial_fail' if any(r['verdict']=='fail' for r in results) else 'inconclusive'}
     write_json(evidence/'grade.json',report)
     return report

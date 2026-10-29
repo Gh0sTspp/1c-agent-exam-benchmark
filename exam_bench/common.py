@@ -37,7 +37,7 @@ def tree_manifest(root):
     return result
 
 
-GRADING_FILES = ('grader.py', 'observer.py', 'platform.py', 'submission.py', 'queries.py',
+GRADING_FILES = ('grader.py', 'observer.py', 'platform.py', 'submission.py', 'queries.py', 'report_observability.py', 'report_query_checks.py', 'calibration_report_query_checks.py', 'calibration_report_observer.py',
                  'common.py', 'process.py', 'windows_job.py', 'workspaces.py', 'runtime.py', 'isolation.py', 'gates.py', 'ou.py','pr.py','forms.py','interface.py', 'calibration.py', 'calibration_ou.py','calibration_pr.py','calibration_forms.py','calibration_interface.py', 'calibration_query.py', 'calibration_periodicity.py', 'calibration_characteristics.py', 'calibration_characteristics_forms.py', 'calibrate.py', 'replay_calibration.py', 'smoke_check.py')
 
 

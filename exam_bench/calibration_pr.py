@@ -123,8 +123,11 @@ def build(target, n, variant, mutant, clone, save, attribute):
 СГРУППИРОВАТЬ ПО Т.Employee'''
     if mutant == 'bonus_report_all_months':
         query = query.replace(' И Т.ПериодРегистрации МЕЖДУ &НачалоПериода И &КонецПериода', ' И &НачалоПериода = &НачалоПериода И &КонецПериода = &КонецПериода')
+    if mutant == 'bonus_report_wrong_seniority':
+        query = query.replace('МАКСИМУМ(Т.Seniority) КАК Стаж', '100 КАК Стаж')
     report = make_report(target, n + 'Bonuses', variant, query, {'employee': 'Сотрудник', 'seniority': 'Стаж', 'percent': 'Процент', 'amount': 'Сумма'},
-                         ['Сотрудник', 'Процент'], ['Сумма'])
+                         ['Сотрудник', 'Стаж', 'Процент'], ['Сумма'])
+    report['seniority_unit'] = 'years' if variant == 'one' else 'months'
     types = {k: 'ChartOfCalculationTypes.ОсновныеНачисления.' + v for k, v in (('tariff', 'Тариф'), ('bonus', 'Премия'), ('trip', 'Командировка'))}
     employees = {'seniority_start': 'SeniorityStart'} if variant == 'one' else {'seniority_start': 'HireDate', 'initial_seniority': 'InitialMonths'}
     pr = {'objects': {'employees': 'Catalog.ФизическиеЛица', 'departments': 'Catalog.Подразделения', 'schedules': 'InformationRegister.' + schedule,

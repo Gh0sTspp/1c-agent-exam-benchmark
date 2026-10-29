@@ -33,7 +33,9 @@ class CharacteristicFixtureTests(unittest.TestCase):
                 {'property': 'BENCH_P2', 'characteristic': 'BENCH_Производитель', 'value': 'Beta'}]
         result = checks({'errors': {}, 'snapshots': {'props': rows, 'statement': []}})
         self.assertEqual(result['OU04']['verdict'], 'pass')
-        self.assertEqual(result['OU20']['verdict'], 'fail')
+        # The data input was verified, but no report binding or column schema
+        # was provided, so the report itself cannot be judged from this fixture.
+        self.assertEqual(result['OU20']['verdict'], 'inconclusive')
 
     def test_catalog_values_get_unique_codes_and_string_qualifier_is_a_property(self):
         code = ou.ou_characteristic_code('ChartOfCharacteristicTypes.Kinds', 'InformationRegister.Values', 'Value')
