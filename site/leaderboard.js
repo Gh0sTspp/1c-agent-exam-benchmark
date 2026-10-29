@@ -366,7 +366,6 @@ function render() {
     const more = node('button', 'Открыть прогон', 'btn small row-more');
     more.addEventListener('click', () => openRun(r)); act.append(more);
     tr.append(place, score, who, time, tok, pc, author, cellActions);
-    if (r.history?.length) sub(score, `оценок: ${r.history.length + 1}`);
     return [tr];
   }));
   const mine = visible.filter(r => r.local).length;
